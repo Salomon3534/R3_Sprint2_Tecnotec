@@ -7,17 +7,15 @@ public class Attendant {
 	
 	private int id;
 	private String dni;
-	private String password;
 	private String name;
-	private String surnames;
+	private String surname;
 	private String email;
 	
-	public Attendant(String dni, String password, String name, String surnames, String email) {
+	public Attendant(String dni, String name, String surname, String email) {
 		super();
 		this.dni = dni;
-		this.password = password;
 		this.name = name;
-		this.surnames = surnames;
+		this.surname = surname;
 		this.email = email;
 	}
 
@@ -37,14 +35,6 @@ public class Attendant {
 		this.dni = dni;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -53,12 +43,12 @@ public class Attendant {
 		this.name = name;
 	}
 
-	public String getSurnames() {
-		return surnames;
+	public String getSurname() {
+		return surname;
 	}
 
-	public void setSurnames(String surname) {
-		this.surnames = surname;
+	public void setSurname(String surname) {
+		this.surname = surname;
 	}
 
 	public String getEmail() {
@@ -71,13 +61,13 @@ public class Attendant {
 
 	@Override
 	public String toString() {
-		return "Attendant [dni=" + dni + ", password=" + password + ", name=" + name + ", surnames="
-				+ surnames + ", email=" + email + "]";
+		return "Attendant [dni=" + dni + ", name=" + name + ", surname="
+				+ surname + ", email=" + email + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dni, email, id, name, password, surnames);
+		return Objects.hash(dni, email, id, name, surname);
 	}
 
 	@Override
@@ -90,8 +80,7 @@ public class Attendant {
 			return false;
 		Attendant other = (Attendant) obj;
 		return Objects.equals(dni, other.dni) && Objects.equals(email, other.email) && id == other.id
-				&& Objects.equals(name, other.name) && Objects.equals(password, other.password)
-				&& Objects.equals(surnames, other.surnames);
+				&& Objects.equals(name, other.name);
 	}
 	
 	
