@@ -12,7 +12,6 @@ public class Attendant {
 	private String email;
 	
 	public Attendant(String dni, String name, String surname, String email) {
-		super();
 		this.dni = dni;
 		this.name = name;
 		this.surname = surname;
@@ -58,11 +57,18 @@ public class Attendant {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+	
+	
 	@Override
 	public String toString() {
-		return "Attendant [dni=" + dni + ", name=" + name + ", surname="
-				+ surname + ", email=" + email + "]";
+	    return "\n" +
+	           "**************************************************\n" +
+	           "         FICHA DE ATENDIENTE: " + (dni != null ? dni.toUpperCase() : "N/A") + "\n" +
+	           "**************************************************\n" +
+	           " > DNI:       " + dni + "\n" +
+	           " > NOMBRE:    " + name + " " + surname + "\n" +
+	           " > EMAIL:     " + email + "\n" +
+	           "**************************************************";
 	}
 
 	@Override

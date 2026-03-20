@@ -2,6 +2,7 @@ package view;
 
 import java.sql.SQLException;
 import model.Guest;
+import model.Attendant;
 import util.InputOutputChecks;
 import util.TotalManagerEuskalEncounter;
 
@@ -53,7 +54,7 @@ public class ViewEuskalEncounter {
             System.out.println("\n===========================");
             System.out.println("   PANEL DE ADMINISTRADOR  ");
             System.out.println("===========================");
-            System.out.println("1. Gestionar Atendientes (DESACTIVADO)");
+            System.out.println("1. Gestionar Atendientes");
             System.out.println("2. Gestionar Encuentros (DESACTIVADO)");
             System.out.println("3. Gestionar Eventos (DESACTIVADO)");
             System.out.println("4. Gestionar Invitados");
@@ -62,22 +63,19 @@ public class ViewEuskalEncounter {
 
             entity = checksInputOutput.getInt(0, 4);
             
-            if (entity == 4) {
-            	
-                // bucle de gestión de invitados
-                manageGuests(showActionMenu("Invitados"));
-            } else if (entity > 0 && entity < 4) {
-                System.out.println("\n[!] Esta sección está temporalmente desactivada.");
+            switch (entity) {
+                case 1 -> manageAttendants(showActionMenu("Atendientes"));
+                case 4 -> manageGuests(showActionMenu("Invitados"));
             }
         } while (entity != 0);
     }
 
     private int showActionMenu(String title) {
         System.out.println("\n>> GESTIÓN DE " + title.toUpperCase());
-        System.out.println("1. Crear invitado");
-        System.out.println("2. Listar todos los invitados");
-        System.out.println("3. Actualizar un invitado");
-        System.out.println("4. Eliminar un invitado");
+        System.out.println("1. Crear " + title.toLowerCase().substring(0, title.length() - 1));
+        System.out.println("2. Listar todos");
+        System.out.println("3. Actualizar");
+        System.out.println("4. Eliminar");
         System.out.println("0. Volver");
         System.out.print("Acción: ");
         return checksInputOutput.getInt(0, 4);
@@ -85,7 +83,6 @@ public class ViewEuskalEncounter {
 
     private void manageGuests(int initialAction) {
         int action = initialAction;
-        
         if (action == 0) return;
 
         do {
@@ -124,10 +121,48 @@ public class ViewEuskalEncounter {
                 System.err.println("\n[ERROR DE SQL]: " + e.getMessage());
             }
 
-            // tras cada acción, volvemos a mostrar el menú de Invitados
-            if (action != 0) {
-                action = showActionMenu("Invitados");
+            if (action != 0) action = showActionMenu("Invitados");
+        } while (action != 0);
+    }
+
+    private void manageAttendants(int initialAction) {
+        int action = initialAction;
+        if (action == 0) return;
+
+        do {
+            try {
+                switch (action) {
+                    case 1 -> {
+                        System.out.println("\n--- REGISTRO DE NUEVO USUARIO ---");
+                        System.out.println(totalManager.createAttendant(
+                            checksInputOutput.getString("DNI: ", 20),
+                            checksInputOutput.getString("Nombre: ", 100),
+                            checksInputOutput.getString("Apellido: ", 150),
+                            checksInputOutput.leerEmail("Email: ", 150)
+                        ));
+                    }
+                    case 2 -> {
+                        System.out.println("\n--- LISTA DE USUARIOS REGISTRADOS ---");
+                        System.out.println(totalManager.listAttendants());
+                    }
+                    case 3 -> {
+                        System.out.println("\n--- ACTUALIZAR USUARIO ---");
+                        System.out.println(totalManager.listAttendants());
+                        System.out.println("\nIntroduzca el DNI actual y los nuevos detalles:");
+                        System.out.println(totalManager.updateAttendants(getAttendantData()));
+                    }
+                    case 4 -> {
+                        System.out.println("\n--- ELIMINAR USUARIO ---");
+                        System.out.println(totalManager.listAttendants());
+                        System.out.println("\nIntroduzca el DNI del usuario a borrar:");
+                        System.out.println(totalManager.deleteAttendant(checksInputOutput.getString("DNI: ", 20)));
+                    }
+                }
+            } catch (SQLException e) {
+                System.err.println("\n[ERROR DE SQL]: " + e.getMessage());
             }
+
+            if (action != 0) action = showActionMenu("Atendientes");
         } while (action != 0);
     }
 
@@ -140,6 +175,15 @@ public class ViewEuskalEncounter {
             checksInputOutput.getString("Carrera/Perfil: ", 200),
             checksInputOutput.leerEmail("Email: ", 150),
             checksInputOutput.getString("Contraseña: ", 255)
+        );
+    }
+
+    private Attendant getAttendantData() {
+        return new Attendant(
+            checksInputOutput.getString("Confirmar DNI: ", 20),
+            checksInputOutput.getString("Nombre: ", 100),
+            checksInputOutput.getString("Apellido: ", 150),
+            checksInputOutput.leerEmail("Email: ", 150)
         );
     }
 }

@@ -67,7 +67,6 @@ public class ManagerGuests {
         return "Error: El usuario no existe.";
     }
 
-    // CORREGIDO: Recibe String, no objeto Guest
     public String deleteGuest(String username) throws SQLException {
         String query = "DELETE FROM invitados WHERE NOMBRE_USUARIO = ?";
         try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query)) {
