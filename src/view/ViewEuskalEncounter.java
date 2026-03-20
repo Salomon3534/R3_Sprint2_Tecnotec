@@ -1,204 +1,145 @@
 package view;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import model.Event;
-import model.KeynoteSpeech;
-import model.PracticalWorkshop;
-import model.ProjectPresentation;
-import model.RoundTable;
+import java.sql.SQLException;
+import model.Guest;
 import util.InputOutputChecks;
 import util.TotalManagerEuskalEncounter;
 
 public class ViewEuskalEncounter {
 
     private InputOutputChecks checksInputOutput = new InputOutputChecks();
-    private TotalManagerEuskalEncounter managerTotal = new TotalManagerEuskalEncounter();
+    private TotalManagerEuskalEncounter totalManager;
 
     public ViewEuskalEncounter(TotalManagerEuskalEncounter totalManagerEuskalEncounter) {
-        this.managerTotal = totalManagerEuskalEncounter;
+        this.totalManager = totalManagerEuskalEncounter;
     }
 
     public void mainMenu() {
-        System.out.println("#########################################");
-        System.out.println("#      BIENVENIDO AL GESTOR DE EVENTOS  #");
-        System.out.println("#########################################");
         int choice;
-
         do {
-            System.out.println("\n1. Entrar como Usuario");
-            System.out.println("2. Entrar como Administrador");
-            System.out.println("3. Salir del Programa");
-            System.out.print("Seleccione su perfil: ");
+            System.out.println("\n========================================");
+            System.out.println(" SISTEMA DE GESTIÓN DE EUSKAL ENCOUNTER");
+            System.out.println("========================================");
+            System.out.println(" 1. Acceso Usuario (Modo Consulta)");
+            System.out.println(" 2. Acceso Administrador (Modo Edición)");
+            System.out.println(" 0. Salir del Sistema");
+            System.out.print("\nSeleccione perfil: ");
             
-            choice = checksInputOutput.getInt(1, 3);
-
-            switch (choice) {
-                case 1 -> {
-                    System.out.println("\nAccediendo como USUARIO...");
-                    menuUser();
-                }
-                case 2 -> {
-                    System.out.println("\nAccediendo como ADMINISTRADOR...");
-                    menuAdmin();
-                }
-                case 3 -> System.out.println("\nGracias por usar el sistema. ¡Hasta pronto!");
-            }
-        } while (choice != 3);
+            choice = checksInputOutput.getInt(0, 2);
+            if (choice == 1) userMenu();
+            else if (choice == 2) adminMenu();
+        } while (choice != 0);
+        
+        System.out.println("\nSaliendo...");
     }
 
-    private void menuUser() {
-        int opcion;
+    private void userMenu() {
+        int option;
         do {
-            System.out.println("\n===========================");
-            System.out.println("      MENU DE USUARIO      ");
-            System.out.println("===========================");
+            System.out.println("\n--- VISTA DE USUARIO ---");
             System.out.println("1. Ver Encuentros");
             System.out.println("2. Ver Eventos");
-            System.out.println("3. Ver Invitados");
-            System.out.println("4. Contacto");
-            System.out.println("5. Cerrar Sesión");
+            System.out.println("0. Volver al menú principal");
             System.out.print("Opción: ");
-            opcion = checksInputOutput.getInt(1, 5);
-
-            switch (opcion) {
-                case 1 -> System.out.println(managerTotal.getGestionEncuentros().listarEncuentros());
-                case 2 -> System.out.println(managerTotal.getGestionEventos().listarEventos());
-                case 3 -> System.out.println(managerTotal.getGestionInvitados().listarInvitados());
-                case 4 -> System.out.println("Contacto: admin@eventos.com");
-                case 5 -> System.out.println("Cerrando sesión...");
-            }
-        } while (opcion != 5);
+            option = checksInputOutput.getInt(0, 3);
+            
+            //TODO
+        } while (option != 0);
     }
 
-    private void menuAdmin() {
-        int opcionPrincipal;
+    private void adminMenu() {
+        int entity;
         do {
             System.out.println("\n===========================");
             System.out.println("   PANEL DE ADMINISTRADOR  ");
             System.out.println("===========================");
-            System.out.println("1. Gestionar Atendientes");
-            System.out.println("2. Gestionar Encuentros");
-            System.out.println("3. Gestionar Eventos");
+            System.out.println("1. Gestionar Atendientes (DESACTIVADO)");
+            System.out.println("2. Gestionar Encuentros (DESACTIVADO)");
+            System.out.println("3. Gestionar Eventos (DESACTIVADO)");
             System.out.println("4. Gestionar Invitados");
-            System.out.println("5. Volver");
+            System.out.println("0. Volver");
             System.out.print("Seleccione entidad: ");
 
-            opcionPrincipal = checksInputOutput.getInt(1, 5);
-            if (opcionPrincipal != 5) {
-                String entidad = obtenerNombreEntidad(opcionPrincipal);
-                int accion = mostrarMenuAcciones(entidad);
-                if (accion != 5) {
-                    ejecutarAccion(opcionPrincipal, accion);
-                }
+            entity = checksInputOutput.getInt(0, 4);
+            
+            if (entity == 4) {
+            	
+                // bucle de gestión de invitados
+                manageGuests(showActionMenu("Invitados"));
+            } else if (entity > 0 && entity < 4) {
+                System.out.println("\n[!] Esta sección está temporalmente desactivada.");
             }
-        } while (opcionPrincipal != 5);
+        } while (entity != 0);
     }
 
-    private String obtenerNombreEntidad(int opcion) {
-        return switch (opcion) {
-            case 1 -> "atendiente";
-            case 2 -> "encuentro";
-            case 3 -> "evento";
-            case 4 -> "invitado";
-            default -> "";
-        };
+    private int showActionMenu(String title) {
+        System.out.println("\n>> GESTIÓN DE " + title.toUpperCase());
+        System.out.println("1. Crear invitado");
+        System.out.println("2. Listar todos los invitados");
+        System.out.println("3. Actualizar un invitado");
+        System.out.println("4. Eliminar un invitado");
+        System.out.println("0. Volver");
+        System.out.print("Acción: ");
+        return checksInputOutput.getInt(0, 4);
     }
 
-    private int mostrarMenuAcciones(String gestion) {
-        System.out.println("\nPANEL DE GESTION: " + gestion.toUpperCase());
-        System.out.println("1. Crear registro");
-        System.out.println("2. Listar");
-        System.out.println("3. Actualizar");
-        System.out.println("4. Eliminar");
-        System.out.println("5. Volver");
-        return checksInputOutput.getInt(1, 5);
-    }
+    private void manageGuests(int initialAction) {
+        int action = initialAction;
+        
+        if (action == 0) return;
 
-    private void ejecutarAccion(int entidad, int accion) {
-        switch (entidad) {
-            case 1 -> gestionarAtendientes(accion);
-            case 2 -> gestionarEncuentros(accion);
-            case 3 -> gestionarEventos(accion);
-            case 4 -> gestionarInvitados(accion);
-        }
-    }
-
-    private void gestionarAtendientes(int accion) {
-        switch (accion) {
-            case 1 -> System.out.println(managerTotal.getGestionAtendientes().crearAtendiente(
-                checksInputOutput.getString("DNI: ", 9), checksInputOutput.getString("Pass: ", 20),
-                checksInputOutput.getString("Nombre: ", 50), checksInputOutput.getString("Apellidos: ", 50),
-                checksInputOutput.leerEmail("Email: ", 100)));
-            case 2 -> System.out.println(managerTotal.getGestionAtendientes().listarAtendientes());
-            case 3 -> System.out.println(managerTotal.getGestionAtendientes().actualizarAtendiente(
-                checksInputOutput.getString("DNI actual: ", 9), checksInputOutput.getString("Nueva Pass: ", 20),
-                checksInputOutput.getString("Nuevo Nombre: ", 50), checksInputOutput.getString("Nuevos Apellidos: ", 50),
-                checksInputOutput.leerEmail("Nuevo Email: ", 100)));
-            case 4 -> System.out.println(managerTotal.getGestionAtendientes().eliminarAtendiente(
-                checksInputOutput.getString("DNI a borrar: ", 9)));
-        }
-    }
-
-    private void gestionarEncuentros(int accion) {
-        switch (accion) {
-            case 1 -> System.out.println(managerTotal.getGestionEncuentros().crearEncuentro(
-                checksInputOutput.getString("Nombre: ", 100), checksInputOutput.getString("Lugar: ", 100),
-                checksInputOutput.getDate("Inicio", "dd/MM/yyyy"), checksInputOutput.getDate("Fin", "dd/MM/yyyy")));
-            case 2 -> System.out.println(managerTotal.getGestionEncuentros().listarEncuentros());
-            case 4 -> System.out.println(managerTotal.getGestionEncuentros().eliminarEncuentro(
-                checksInputOutput.getInt(0, managerTotal.getGestionEncuentros().getCantidadEncuentros())));
-        }
-    }
-
-    private void gestionarEventos(int accion) {
-        switch (accion) {
-            case 1 -> {
-                int tipo = seleccionarTipoEvento();
-                if (tipo != 5) {
-                    Event nuevo = capturarDatosEvento(tipo);
-                    if (nuevo != null) System.out.println(managerTotal.getGestionEventos().crearEvento(nuevo));
+        do {
+            try {
+                switch (action) {
+                    case 1 -> {
+                        System.out.println("\n--- REGISTRO DE NUEVO INVITADO ---");
+                        System.out.println(totalManager.createGuest(
+                            checksInputOutput.getString("Username: ", 50),
+                            checksInputOutput.getString("Nombre: ", 100),
+                            checksInputOutput.getString("Apellidos: ", 150),
+                            checksInputOutput.getString("Teléfono: ", 15),
+                            checksInputOutput.getString("Carrera/Perfil: ", 200),
+                            checksInputOutput.leerEmail("Correo electrónico: ", 150),
+                            checksInputOutput.getString("Contraseña: ", 255)
+                        ));
+                    }
+                    case 2 -> {
+                        System.out.println("\n--- LISTA DE INVITADOS REGISTRADOS ---");
+                        System.out.println(totalManager.listGuests());
+                    }
+                    case 3 -> {
+                        System.out.println("\n--- ACTUALIZAR DATOS ---");
+                        System.out.println(totalManager.listGuests());
+                        System.out.println("\nIntroduzca el Username actual y los nuevos detalles:");
+                        System.out.println(totalManager.updateGuest(getGuestData()));
+                    }
+                    case 4 -> {
+                        System.out.println("\n--- ELIMINAR REGISTRO ---");
+                        System.out.println(totalManager.listGuests());
+                        System.out.println("\nIntroduzca el Username del invitado a borrar:");
+                        System.out.println(totalManager.deleteGuest(checksInputOutput.getString("Username: ", 50)));
+                    }
                 }
+            } catch (SQLException e) {
+                System.err.println("\n[ERROR DE SQL]: " + e.getMessage());
             }
-            case 2 -> System.out.println(managerTotal.getGestionEventos().listarEventos());
-            case 4 -> System.out.println(managerTotal.getGestionEventos().eliminarEvento(checksInputOutput.getInt(0, 9999)));
-        }
+
+            // tras cada acción, volvemos a mostrar el menú de Invitados
+            if (action != 0) {
+                action = showActionMenu("Invitados");
+            }
+        } while (action != 0);
     }
 
-    private void gestionarInvitados(int accion) {
-        switch (accion) {
-            case 1 -> System.out.println(managerTotal.getGestionInvitados().crearInvitado(
-                checksInputOutput.getString("Nick: ", 30), checksInputOutput.getString("Apellido 1: ", 50),
-                checksInputOutput.getString("Apellido 2: ", 50), checksInputOutput.getString("Tel: ", 15),
-                checksInputOutput.getString("Estudios: ", 50), checksInputOutput.leerEmail("Email: ", 100),
-                checksInputOutput.getString("Pass: ", 20)));
-            case 2 -> System.out.println(managerTotal.getGestionInvitados().listarInvitados());
-            case 4 -> System.out.println(managerTotal.getGestionInvitados().eliminarInvitado(
-                checksInputOutput.getString("Nick a borrar: ", 30)));
-        }
-    }
-
-    private int seleccionarTipoEvento() {
-        System.out.println("\n1. Conferencia | 2. Mesa Redonda | 3. Proyecto | 4. Taller | 5. Cancelar");
-        return checksInputOutput.getInt(1, 5);
-    }
-
-    private Event capturarDatosEvento(int tipo) {
-        String tit = checksInputOutput.getString("Título: ", 100);
-        String ubi = checksInputOutput.getString("Ubicación: ", 100);
-        String des = checksInputOutput.getString("Descripción: ", 200);
-        LocalDate fI = checksInputOutput.getDate("Fecha Inicio", "dd/MM/yyyy");
-        LocalDate fF = checksInputOutput.getDate("Fecha Fin", "dd/MM/yyyy");
-        LocalTime hI = checksInputOutput.leerHora("Hora Inicio", "HH:mm");
-        LocalTime hF = checksInputOutput.leerHora("Hora Fin", "HH:mm");
-        String cod = checksInputOutput.getString("Código (5 chars): ", 5);
-
-        return switch (tipo) {
-            case 1 -> new KeynoteSpeech(tit, ubi, des, fI, fF, hI, hF, cod, checksInputOutput.getString("Temática: ", 50));
-            case 2 -> new RoundTable(tit, ubi, des, fI, fF, hI, hF, cod, checksInputOutput.getInt(1, 100));
-            case 3 -> new ProjectPresentation(tit, ubi, des, fI, fF, hI, hF, cod, checksInputOutput.getString("Tipo: ", 50), checksInputOutput.getString("Detalles: ", 200));
-            case 4 -> new PracticalWorkshop(tit, ubi, des, fI, fF, hI, hF, cod, checksInputOutput.getInt(1, 100));
-            default -> null;
-        };
+    private Guest getGuestData() {
+        return new Guest(
+            checksInputOutput.getString("Confirmar Username: ", 50),
+            checksInputOutput.getString("Nombre: ", 100),
+            checksInputOutput.getString("Apellidos: ", 150),
+            checksInputOutput.getString("Teléfono: ", 15),
+            checksInputOutput.getString("Carrera/Perfil: ", 200),
+            checksInputOutput.leerEmail("Email: ", 150),
+            checksInputOutput.getString("Contraseña: ", 255)
+        );
     }
 }

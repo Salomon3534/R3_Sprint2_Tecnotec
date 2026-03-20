@@ -2,52 +2,49 @@ package db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class DatabaseConnector {
-	
-	private static Connection conexion;
-	
-	 public static Connection getConexion() {
-			return conexion;
-		}
-	public static void setConexion(Connection conexion) {
-			DatabaseConnector.conexion = conexion;
-		}
-   
     
-    public static void conectar(){
-
-        try{
-            //Cargamos el driver, el driver es la libreria que nos permite conectarnos a la BD
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Driver cargado");        
-            try{
-            //Establecemos la conexion con la BD            
-            //La BD se encuentra en el localhost(en mi ordenador)
-            //El usuario es root y la contraseña es 1234
-            //La conexion se hace a traves del puerto 3306
-            //La BD se llama cine, es la que viene por defecto en MySQL
-            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/biblioteca","root","root");
-          
-            System.out.println("Conexion establecida");
-          
-        }catch(Exception e){
-            System.out.println("Error en la conexion");
+    private static Connection conexion;
+    
+    // modificado para que si la conexion es nula, intente conectar antes de devolverla
+    public static Connection getConexion() throws SQLException {
+        if (conexion == null || conexion.isClosed()) {
+            conectar();
         }
-        }catch(Exception e){
-            System.out.println("Error en el driver");
+        return conexion;
+    }
+
+    public static void setConexion(Connection conexion) {
+        DatabaseConnector.conexion = conexion;
+    }
+   
+    // ahora lanza la excepcion hacia arriba para que el main sepa si algo fallo
+    public static void conectar() throws SQLException {
+        try {
+            // cargamos el driver de mysql
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            
+            // establecemos la conexion con los datos de tu bd
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/euskalencounter", "root", "1DAW3");
+            
+            System.out.println("conexion establecida con exito.");
+            
+        } catch (ClassNotFoundException e) {
+            System.err.println("error: no se encontro el driver jdbc.");
+            throw new SQLException(e);
+        } catch (SQLException e) {
+            System.err.println("error: no se pudo conectar a la base de datos.");
+            throw e;
         }
     }
 
-
-public static void cerrarConexion() throws SQLException {
-	// TODO Auto-generated method stub
-	conexion.close();
-}
-
-
+    // cierra la conexion de forma segura
+    public static void cerrarConexion() throws SQLException {
+        if (conexion != null && !conexion.isClosed()) {
+            conexion.close();
+            System.out.println("conexion cerrada.");
+        }
+    }
 }
