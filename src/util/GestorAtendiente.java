@@ -2,15 +2,15 @@
 package util;
 
 import java.util.ArrayList;
-import model.Atendiente;
+import model.Attendant;
 
 
 public class GestorAtendiente {
-    private static ArrayList<Atendiente> listaAtendientes = new ArrayList<>();
+    private static ArrayList<Attendant> listaAtendientes = new ArrayList<>();
 
     // crear atendiente
     public String crearAtendiente(String dni, String contraseña, String nombre, String apellidos, String email) {
-        Atendiente nuevoAtendiente = new Atendiente(dni, contraseña, nombre, apellidos, email);
+        Attendant nuevoAtendiente = new Attendant(dni, contraseña, nombre, apellidos, email);
         listaAtendientes.add(nuevoAtendiente);
         return  "Atendiente con DNI: " + dni + " agregado con éxito.";
     }
@@ -22,7 +22,7 @@ public class GestorAtendiente {
         }
         
         String listaString = "";
-        for(Atendiente a : listaAtendientes) {
+        for(Attendant a : listaAtendientes) {
             listaString += "\n" + a.toString();
         }
         return listaString;
@@ -34,7 +34,7 @@ public class GestorAtendiente {
 
             return "La lista de atendientes está vacía";
         }
-        for (Atendiente atendiente : listaAtendientes) {
+        for (Attendant atendiente : listaAtendientes) {
 
             if (atendiente.getDni().equals(dni)) {
 
@@ -57,8 +57,8 @@ public class GestorAtendiente {
 
             return "La lista de atendientes está vacía";
         }
-        Atendiente atendienteEliminar = null;
-        for (Atendiente atendiente : listaAtendientes) {
+        Attendant atendienteEliminar = null;
+        for (Attendant atendiente : listaAtendientes) {
 
             if (atendiente.getDni().equals(dni)) {
 

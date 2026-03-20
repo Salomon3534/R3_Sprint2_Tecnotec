@@ -2,15 +2,15 @@
 package util;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import model.Encuentro;
+import model.Encounter;
 public class GestorEncuentro {
 	
-	private static ArrayList<Encuentro> listaEncuentros = new ArrayList<>();
+	private static ArrayList<Encounter> listaEncuentros = new ArrayList<>();
 	
 	//crear encuentr
 	public String crearEncuentro(String nombre, String lugar, LocalDate fechaInicio, LocalDate fechaFin) {
 		
-		Encuentro nuevoEncuentro = new Encuentro(fechaInicio, fechaFin, lugar, nombre);
+		Encounter nuevoEncuentro = new Encounter(fechaInicio, fechaFin, lugar, nombre);
 		GestorEncuentro.listaEncuentros.add(nuevoEncuentro);
 		return "Encuentro con edición: " + listaEncuentros.size() + " creado con éxito.";
 		
@@ -23,7 +23,7 @@ public class GestorEncuentro {
        }
       
        String listaString = "";
-       for(Encuentro e : listaEncuentros) {
+       for(Encounter e : listaEncuentros) {
        	listaString += "\n" + e.toString();
        }
        return listaString;
@@ -37,7 +37,7 @@ public class GestorEncuentro {
 			return "La lista de encuentros está vacía";
 			
 		}
-		for (Encuentro encuentro : listaEncuentros) {
+		for (Encounter encuentro : listaEncuentros) {
 			
 			if (encuentro.getId() == id) {
 				
@@ -58,8 +58,8 @@ public class GestorEncuentro {
 			
 			return "La lista de encuentros esta vacia";
 		}
-		Encuentro eliminarEncuentro = null;
-		for (Encuentro encuentro : listaEncuentros) {
+		Encounter eliminarEncuentro = null;
+		for (Encounter encuentro : listaEncuentros) {
 			
 			if (encuentro.getId() == id) {
 				

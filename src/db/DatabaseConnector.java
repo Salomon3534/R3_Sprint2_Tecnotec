@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ConectorBD {
+public class DatabaseConnector {
 	
 	private static Connection conexion;
 	
@@ -15,7 +15,7 @@ public class ConectorBD {
 			return conexion;
 		}
 	public static void setConexion(Connection conexion) {
-			ConectorBD.conexion = conexion;
+			DatabaseConnector.conexion = conexion;
 		}
    
     

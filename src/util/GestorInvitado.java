@@ -2,11 +2,11 @@
 package util;
 
 import java.util.ArrayList;
-import model.Invitado;
+import model.Guest;
 
 public class GestorInvitado {
 
-    private static ArrayList<Invitado> listaInvitados = new ArrayList<>();
+    private static ArrayList<Guest> listaInvitados = new ArrayList<>();
 
     //crear invitado
     public String crearInvitado(
@@ -18,7 +18,7 @@ public class GestorInvitado {
             String correo,
             String contrasena
     ) {
-        Invitado nuevoInvitado = new Invitado(
+        Guest nuevoInvitado = new Guest(
                 nombreUsuario,
                 primerApellido,
                 segundoApellido,
@@ -40,7 +40,7 @@ public class GestorInvitado {
         }
         
         String listaString = "";
-        for(Invitado i : listaInvitados) {
+        for(Guest i : listaInvitados) {
             listaString += "\n" + i.toString();
         }
         return listaString;
@@ -62,7 +62,7 @@ public class GestorInvitado {
             
         }
 
-        for (Invitado invitado : listaInvitados) {
+        for (Guest invitado : listaInvitados) {
             if (invitado.getNombreUsuario().equals(nombreUsuario)) {
 
                 invitado.setPrimerApellido(primerApellido);
