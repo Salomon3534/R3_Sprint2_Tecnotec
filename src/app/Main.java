@@ -1,5 +1,3 @@
-//v 13/02/2026 13:10
-
 package app;
 
 import java.time.LocalDate;
@@ -9,7 +7,7 @@ import util.*;
 import java.util.Scanner;
 
 public class Main {
-    static ChecksEntradaSalida checks = new ChecksEntradaSalida();
+    static InputOutputChecks checks = new InputOutputChecks();
     static GestorEncuentro gestionEncuentros = new GestorEncuentro();
     static GestorEvento gestionEventos = new GestorEvento();
     static GestorInvitado gestionInvitados = new GestorInvitado();
@@ -191,7 +189,7 @@ public class Main {
                         case 1 -> { // Crear evento
                             int tipoEvento = listaTipoEvento();
                             if (tipoEvento != 5) {
-                                Evento nuevoEvento = capturarDatosEvento(tipoEvento);
+                                Event nuevoEvento = capturarDatosEvento(tipoEvento);
                                 if (nuevoEvento != null) {
                                     System.out.println("Guardando evento en el sistema...");
                                     System.out.println(gestionEventos.crearEvento(nuevoEvento));
@@ -209,19 +207,19 @@ public class Main {
                             System.out.println("\n--- MODIFICAR EVENTO EXISTENTE ---");
                             System.out.print("Ingrese el ID numérico del evento: ");
                             // Nota: Asumo que tienes un método getCantidadEventos() o usas un rango amplio
-                            Evento e = gestionEventos.buscarPorID(checks.leerEntero(0, 9999));
+                            Event e = gestionEventos.buscarPorID(checks.leerEntero(0, 9999));
                             
                             if (e != null) {
                                 System.out.println("Evento encontrado: " + e.getClass().getSimpleName());
                                 System.out.println("Por favor, reingrese los datos actualizados:");
                                 
                                 int tipoDetectado = 0;
-                                if (e instanceof ConferenciaMagistral) tipoDetectado = 1;
-                                else if (e instanceof MesaRedonda) tipoDetectado = 2;
-                                else if (e instanceof PresentacionProyecto) tipoDetectado = 3;
-                                else if (e instanceof TallerPractico) tipoDetectado = 4;
+                                if (e instanceof KeynoteSpeech) tipoDetectado = 1;
+                                else if (e instanceof RoundTable) tipoDetectado = 2;
+                                else if (e instanceof ProjectPresentation) tipoDetectado = 3;
+                                else if (e instanceof PracticalWorkshop) tipoDetectado = 4;
 
-                                Evento eventoModificado = capturarDatosEvento(tipoDetectado);
+                                Event eventoModificado = capturarDatosEvento(tipoDetectado);
                                 // Simulación de actualización
                                 System.out.println("Datos capturados para actualización: " + eventoModificado);
                             } else {
@@ -277,7 +275,7 @@ public class Main {
         }
 
         // METODO AUXILIAR PARA NO REPETIR CODIGO EN EVENTOS
-        private static Evento capturarDatosEvento(int tipo) {
+        private static Event capturarDatosEvento(int tipo) {
             System.out.println("\nRELLENE LA FICHA DEL EVENTO:");
             System.out.println("--------------------------------");
             String titulo = checks.leerString("Título del Evento: ", 100);
@@ -290,14 +288,14 @@ public class Main {
             String codigo = checks.leerString("Código ID único (5 chars): ", 5);
 
             return switch (tipo) {
-                case 1 -> new ConferenciaMagistral(titulo, ubicacion, descripcion, fIni, fFin, hIni, hFin, codigo, 
+                case 1 -> new KeynoteSpeech(titulo, ubicacion, descripcion, fIni, fFin, hIni, hFin, codigo, 
                         checks.leerString("Temática de la conferencia: ", 50));
-                case 2 -> new MesaRedonda(titulo, ubicacion, descripcion, fIni, fFin, hIni, hFin, codigo, 
+                case 2 -> new RoundTable(titulo, ubicacion, descripcion, fIni, fFin, hIni, hFin, codigo, 
                         checks.leerEntero(1, 100)); // Pide el número entero para N. Conferencia
-                case 3 -> new PresentacionProyecto(titulo, ubicacion, descripcion, fIni, fFin, hIni, hFin, codigo, 
+                case 3 -> new ProjectPresentation(titulo, ubicacion, descripcion, fIni, fFin, hIni, hFin, codigo, 
                         checks.leerString("Tipo de proyecto: ", 50), 
                         checks.leerString("Detalles del proyecto: ", 200));
-                case 4 -> new TallerPractico(titulo, ubicacion, descripcion, fIni, fFin, hIni, hFin, codigo, 
+                case 4 -> new PracticalWorkshop(titulo, ubicacion, descripcion, fIni, fFin, hIni, hFin, codigo, 
                         checks.leerEntero(1, 100)); // Pide el número entero para N. Taller
                 default -> null;
             };

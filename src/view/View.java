@@ -5,15 +5,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import db.ConectorBD;
-import model.Libro;
-import model.Miembro;
-import model.PrestamoActivo;
+import db.DatabaseConnector;
+import model.*;
 
-import java.sql.SQLException;
-import java.util.Scanner;
-
-import util.GestionBiblioteca;
+import util.*;
 
 public class View {
 	

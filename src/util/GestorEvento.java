@@ -3,11 +3,11 @@ package util;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import model.Evento;
+import model.Event;
 public class GestorEvento {
-   private static ArrayList<Evento> listaEventos = new ArrayList<>();
+   private static ArrayList<Event> listaEventos = new ArrayList<>();
    public String crearEvento(
-           Evento e
+           Event e
    ) {
        listaEventos.add(e);
        return e.getClass().getSimpleName() + " creado con éxito. ID: " + e.getId();
@@ -18,7 +18,7 @@ public class GestorEvento {
        }
       
        String listaString = "";
-       for(Evento e : listaEventos) {
+       for(Event e : listaEventos) {
        	listaString += "\n" + e.toString();
        }
        return listaString;
@@ -40,7 +40,7 @@ public class GestorEvento {
 			
 		}
    	
-       for (Evento evento : listaEventos) {
+       for (Event evento : listaEventos) {
            if (evento.getId() == id) {
                evento.setTitulo(titulo);
                evento.setUbicacion(ubicacion);
@@ -55,12 +55,12 @@ public class GestorEvento {
        }
        return "No se encontró el ID " + id;
    }
-   public Evento buscarPorID(int id) {
-       Evento encontrado = listaEventos.get(id);
+   public Event buscarPorID(int id) {
+       Event encontrado = listaEventos.get(id);
        return encontrado;
   }
   
-   public String buscarEvento(Evento e) {
+   public String buscarEvento(Event e) {
       
        int id = listaEventos.indexOf(e);
        return e.getTitulo() + " tiene el ID: " + id + "en la lista de eventos";

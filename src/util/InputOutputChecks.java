@@ -1,4 +1,4 @@
-//13/02/2026 12:10
+
 package util;
 
 import java.time.LocalDate;
@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-public class ChecksEntradaSalida {
+public class InputOutputChecks {
 
     static Scanner sc = new Scanner(System.in);
 
