@@ -1,17 +1,90 @@
+//v 13/02/2026 12:12
 package util;
-
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import db.DatabaseConnector;
 import model.Encounter;
-
 public class ManagerEncounters {
+	
+	private static ArrayList<Encounter> listaEncuentros = new ArrayList<>();
+	
+	//crear encuentr
+	public String crearEncuentro(String nombre, String lugar, LocalDate fechaInicio, LocalDate fechaFin) {
+		
+		Encounter nuevoEncuentro = new Encounter(fechaInicio, fechaFin, lugar, nombre);
+		ManagerEncounters.listaEncuentros.add(nuevoEncuentro);
+		return "Encuentro con edición: " + listaEncuentros.size() + " creado con éxito.";
+		
+	}
+	
+	//listar encuentro
+	public String listarEncuentros() {
+		if (listaEncuentros.isEmpty()) {
+           return "No hay encuentros por ahora";
+       }
+      
+       String listaString = "";
+       for(Encounter e : listaEncuentros) {
+       	listaString += "\n" + e.toString();
+       }
+       return listaString;
+	}
+	
+	//actualizar encuentro
+	public String actualizarEncuentro(String nombre, String lugar, LocalDate fechaInicio, LocalDate fechaFin, int id) {
+		
+		if (listaEncuentros.isEmpty()) {
+			
+			return "La lista de encuentros está vacía";
+			
+		}
+		for (Encounter encuentro : listaEncuentros) {
+			
+			if (encuentro.getId() == id) {
+				
+				encuentro.setNombre(nombre);
+				encuentro.setLugar(lugar);
+				encuentro.setDateStart(fechaInicio);
+				encuentro.setDateEnd(fechaFin);
+				return "El encuentro se ha actualizado con éxito";
+			}
+		}
+		return "El encuentro no se ha encontrado";
+	}
+	
+	//eliminar encuentro
+	public String eliminarEncuentro(int id) {
+		
+		if (listaEncuentros.isEmpty()) {
+			
+			return "La lista de encuentros esta vacia";
+		}
+		Encounter eliminarEncuentro = null;
+		for (Encounter encuentro : listaEncuentros) {
+			
+			if (encuentro.getId() == id) {
+				
+				eliminarEncuentro = encuentro;
+			}
+		}
+		
+		if (eliminarEncuentro != null) {
+			
+			listaEncuentros.remove(eliminarEncuentro);
+			return "\n El evento se ha eliminado con exito";
+			
+		}
+		return "\n El evento no se ha encontrado";
+	}
+	
+	//conteo
+	public int getCantidadEncuentros() {
+		return listaEncuentros.size();
+	}
+}
 
-    private ArrayList<Encounter> encountersList = new ArrayList<>();
 
+<<<<<<< Updated upstream
+=======
     public ManagerEncounters() throws SQLException {
         loadEncounters();
     }
@@ -22,8 +95,8 @@ public class ManagerEncounters {
         try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-            	encountersList.add(new Encounter(
-                    rs.getString("CODIGO"), 
+                encountersList.add(new Encounter(
+                    rs.getInt("CODIGO"), 
                     rs.getDate("FECHA_INICIO"),
                     rs.getDate("FECHA_FIN"), 
                     rs.getString("UBICACION")
@@ -32,15 +105,17 @@ public class ManagerEncounters {
         }
     }
 
-    public String createEncounter(String code, Date dateStart, Date dateEnd, String location) throws SQLException {
-        String query = "INSERT INTO ENCUENTRO VALUES (?, ?, ?, ?)";
+    // No pedimos 'code' porque la DB lo genera solo (AI)
+    public String createEncounter(Date dateStart, Date dateEnd, String location) throws SQLException {
+        String query = "INSERT INTO ENCUENTRO (FECHA_INICIO, FECHA_FIN, UBICACION) VALUES (?, ?, ?)";
         try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query)) {
-            ps.setString(1, code); ps.setDate(2, dateStart); ps.setDate(3, dateEnd);
-            ps.setString(4, location);
+            ps.setDate(1, dateStart); 
+            ps.setDate(2, dateEnd);
+            ps.setString(3, location);
             ps.executeUpdate();
         }
         loadEncounters();
-        return "¡Encuentro con el codigo'" + code + "' se ha creado con éxito!";
+        return "¡Nuevo encuentro registrado correctamente!";
     }
 
     public String listEncounters() {
@@ -51,30 +126,31 @@ public class ManagerEncounters {
     }
 
     public String updateEncounter(Encounter e) throws SQLException {
-        String query = "UPDATE ENCUENTRO SET CODIGO=?, FECHA_INICIO=?, FECHA_FIN=?, UBICACION=? WHERE CODIGO=?";
+        String query = "UPDATE ENCUENTRO SET FECHA_INICIO=?, FECHA_FIN=?, UBICACION=? WHERE CODIGO=?";
         try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query)) {
-            ps.setString(1, e.getCode());
-            ps.setDate(2, e.getDateStart());
-            ps.setDate(3, e.getDateEnd());
-            ps.setString(4, e.getLocation());
-            ps.setString(5, e.getCode());
+            ps.setDate(1, e.getDateStart());
+            ps.setDate(2, e.getDateEnd());
+            ps.setString(3, e.getLocation());
+            ps.setInt(4, e.getCode());
+            
             if (ps.executeUpdate() > 0) {
                 loadEncounters();
-                return "Datos del encuentro con codigo '" + e.getCode() + "' actualizados correctamente.";
+                return "Encuentro #" + e.getCode() + " actualizado.";
             }
         }
-        return "Error: El encuentro no existe.";
+        return "Error: No se encontró el encuentro.";
     }
 
-    public String deleteEncounter(String code) throws SQLException {
+    public String deleteEncounter(int code) throws SQLException {
         String query = "DELETE FROM ENCUENTRO WHERE CODIGO = ?";
         try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query)) {
-            ps.setString(1, code);
+            ps.setInt(1, code);
             if (ps.executeUpdate() > 0) {
                 loadEncounters();
-                return "El encuentro con el codigo: '" + code + "' se ha eliminado correctamente.";
+                return "Encuentro #" + code + " eliminado.";
             }
         }
-        return "Error: No se encontró el encuentro con el codigo'" + code + "'.";
+        return "Error: No se encontró el encuentro.";
     }
 }
+>>>>>>> Stashed changes
