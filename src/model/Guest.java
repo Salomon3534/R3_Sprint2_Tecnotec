@@ -12,9 +12,10 @@ public class Guest {
     private String email;
     private String password;
     
+    //constructor
+    
     public Guest(String username, String name, String surnames, String phoneNumber, String career, String email,
             String password) {
-        super();
         this.username = username;
         this.name = name;
         this.surnames = surnames;
@@ -24,7 +25,8 @@ public class Guest {
         this.password = password;
     }
     
-    // Getters y Setters
+    // getters y Setters
+    
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
     public String getName() { return name; }
@@ -44,7 +46,7 @@ public class Guest {
     public String toString() {
         return "\n" +
                "**************************************************\n" +
-               "          FICHA DE INVITADO: " + username.toUpperCase() + "\n" +
+               "          FICHA DE INVITADO: " + (username != null ? username.toUpperCase() : "N/A") + "\n" +
                "**************************************************\n" +
                " > USUARIO:   " + username + "\n" +
                " > NOMBRE:    " + name + " " + surnames + "\n" +
@@ -56,7 +58,7 @@ public class Guest {
 
     @Override
     public int hashCode() {
-        return Objects.hash(career, email, name, password, phoneNumber, surnames, username);
+        return Objects.hash(username);
     }
     
     @Override
@@ -64,9 +66,7 @@ public class Guest {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Guest other = (Guest) obj;
-        return Objects.equals(career, other.career) && Objects.equals(email, other.email)
-                && Objects.equals(name, other.name) && Objects.equals(password, other.password)
-                && Objects.equals(phoneNumber, other.phoneNumber) && Objects.equals(surnames, other.surnames)
-                && Objects.equals(username, other.username);
+        // Dos invitados son iguales si tienen el mismo nombre de usuario
+        return Objects.equals(username, other.username);
     }
 }
