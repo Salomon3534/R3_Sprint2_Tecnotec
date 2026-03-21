@@ -1,31 +1,27 @@
 
 package model;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Encounter {
-	
+
 	private int id;
 	private String location;
-	private String name;
-	private LocalDate dateStart;
-	private LocalDate dateEnd;
-	
-	//eventos que este encuentro engloba
+	private String code;
+	private Date dateStart;
+	private Date dateEnd;
+
+	// eventos que este encuentro engloba
 	private ArrayList<Event> eventsInEncounterList;
 
-	//constructor
-	public Encounter(int id, String lugar, String nombre, LocalDate dateStart, LocalDate dateEnd,
-			ArrayList<Event> eventsInEncounterList) {
-		super();
-		this.id = id;
-		this.location = lugar;
-		this.name = nombre;
+	// constructor
+	public Encounter(String code, Date dateStart, Date dateEnd, String location) {
+		this.code = code;
 		this.dateStart = dateStart;
 		this.dateEnd = dateEnd;
-		this.eventsInEncounterList = eventsInEncounterList;
+		this.location = location;
 	}
 
 	public int getId() {
@@ -36,35 +32,35 @@ public class Encounter {
 		this.id = id;
 	}
 
-	public String getLugar() {
+	public String getLocation() {
 		return location;
 	}
 
-	public void setLugar(String lugar) {
+	public void setLocation(String lugar) {
 		this.location = lugar;
 	}
 
-	public String getNombre() {
-		return name;
+	public String getCode() {
+		return code;
 	}
 
-	public void setNombre(String nombre) {
-		this.name = nombre;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
-	public LocalDate getDateStart() {
+	public Date getDateStart() {
 		return dateStart;
 	}
 
-	public void setDateStart(LocalDate dateStart) {
+	public void setDateStart(Date dateStart) {
 		this.dateStart = dateStart;
 	}
 
-	public LocalDate getDateEnd() {
+	public Date getDateEnd() {
 		return dateEnd;
 	}
 
-	public void setDateEnd(LocalDate dateEnd) {
+	public void setDateEnd(Date dateEnd) {
 		this.dateEnd = dateEnd;
 	}
 
@@ -76,16 +72,15 @@ public class Encounter {
 		this.eventsInEncounterList = eventsInEncounterList;
 	}
 
-	
 	@Override
 	public String toString() {
-		return "Encounter [id=" + id + ", location=" + location + ", name=" + name + ", dateStart=" + dateStart
+		return "Encounter [id=" + id + ", location=" + location + ", code=" + code + ", dateStart=" + dateStart
 				+ ", dateEnd=" + dateEnd + ", eventsInEncounterList=" + eventsInEncounterList + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dateEnd, dateStart, eventsInEncounterList, id, location, name);
+		return Objects.hash(code, dateEnd, dateStart, eventsInEncounterList, id, location);
 	}
 
 	@Override
@@ -97,9 +92,10 @@ public class Encounter {
 		if (getClass() != obj.getClass())
 			return false;
 		Encounter other = (Encounter) obj;
-		return Objects.equals(dateEnd, other.dateEnd) && Objects.equals(dateStart, other.dateStart)
+		return Objects.equals(code, other.code) && Objects.equals(dateEnd, other.dateEnd)
+				&& Objects.equals(dateStart, other.dateStart)
 				&& Objects.equals(eventsInEncounterList, other.eventsInEncounterList) && id == other.id
-				&& Objects.equals(location, other.location) && Objects.equals(name, other.name);
+				&& Objects.equals(location, other.location);
 	}
-	
-	}
+
+}
