@@ -1,85 +1,80 @@
-//v 13/02/2026 12:12
 package util;
-import java.time.LocalDate;
+
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import db.DatabaseConnector;
 import model.Encounter;
+
 public class ManagerEncounters {
-	
-	private static ArrayList<Encounter> listaEncuentros = new ArrayList<>();
-	
-	//crear encuentr
-	public String crearEncuentro(String nombre, String lugar, LocalDate fechaInicio, LocalDate fechaFin) {
-		
-		Encounter nuevoEncuentro = new Encounter(fechaInicio, fechaFin, lugar, nombre);
-		ManagerEncounters.listaEncuentros.add(nuevoEncuentro);
-		return "Encuentro con edición: " + listaEncuentros.size() + " creado con éxito.";
-		
-	}
-	
-	//listar encuentro
-	public String listarEncuentros() {
-		if (listaEncuentros.isEmpty()) {
-           return "No hay encuentros por ahora";
-       }
-      
-       String listaString = "";
-       for(Encounter e : listaEncuentros) {
-       	listaString += "\n" + e.toString();
-       }
-       return listaString;
-	}
-	
-	//actualizar encuentro
-	public String actualizarEncuentro(String nombre, String lugar, LocalDate fechaInicio, LocalDate fechaFin, int id) {
-		
-		if (listaEncuentros.isEmpty()) {
-			
-			return "La lista de encuentros está vacía";
-			
-		}
-		for (Encounter encuentro : listaEncuentros) {
-			
-			if (encuentro.getId() == id) {
-				
-				encuentro.setNombre(nombre);
-				encuentro.setLugar(lugar);
-				encuentro.setDateStart(fechaInicio);
-				encuentro.setDateEnd(fechaFin);
-				return "El encuentro se ha actualizado con éxito";
-			}
-		}
-		return "El encuentro no se ha encontrado";
-	}
-	
-	//eliminar encuentro
-	public String eliminarEncuentro(int id) {
-		
-		if (listaEncuentros.isEmpty()) {
-			
-			return "La lista de encuentros esta vacia";
-		}
-		Encounter eliminarEncuentro = null;
-		for (Encounter encuentro : listaEncuentros) {
-			
-			if (encuentro.getId() == id) {
-				
-				eliminarEncuentro = encuentro;
-			}
-		}
-		
-		if (eliminarEncuentro != null) {
-			
-			listaEncuentros.remove(eliminarEncuentro);
-			return "\n El evento se ha eliminado con exito";
-			
-		}
-		return "\n El evento no se ha encontrado";
-	}
-	
-	//conteo
-	public int getCantidadEncuentros() {
-		return listaEncuentros.size();
-	}
+
+    private ArrayList<Encounter> encountersList = new ArrayList<>();
+
+    public ManagerEncounters() throws SQLException {
+        loadEncounters();
+    }
+
+    public void loadEncounters() throws SQLException {
+        encountersList.clear();
+        String query = "SELECT * FROM ENCUENTRO";
+        try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+            	encountersList.add(new Encounter(
+                    rs.getString("CODIGO"), 
+                    rs.getDate("FECHA_INICIO"),
+                    rs.getDate("FECHA_FIN"), 
+                    rs.getString("UBICACION")
+                ));
+            }
+        }
+    }
+
+    public String createEncounter(String code, Date dateStart, Date dateEnd, String location) throws SQLException {
+        String query = "INSERT INTO ENCUENTRO VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query)) {
+            ps.setString(1, code); ps.setDate(2, dateStart); ps.setDate(3, dateEnd);
+            ps.setString(4, location);
+            ps.executeUpdate();
+        }
+        loadEncounters();
+        return "¡Encuentro con el codigo'" + code + "' se ha creado con éxito!";
+    }
+
+    public String listEncounters() {
+        if (encountersList.isEmpty()) return "No hay encuentros registrados.";
+        StringBuilder sb = new StringBuilder();
+        for (Encounter e : encountersList) sb.append(e.toString());
+        return sb.toString();
+    }
+
+    public String updateEncounter(Encounter e) throws SQLException {
+        String query = "UPDATE ENCUENTRO SET CODIGO=?, FECHA_INICIO=?, FECHA_FIN=?, UBICACION=? WHERE CODIGO=?";
+        try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query)) {
+            ps.setString(1, e.getCode());
+            ps.setDate(2, e.getDateStart());
+            ps.setDate(3, e.getDateEnd());
+            ps.setString(4, e.getLocation());
+            ps.setString(5, e.getCode());
+            if (ps.executeUpdate() > 0) {
+                loadEncounters();
+                return "Datos del encuentro con codigo '" + e.getCode() + "' actualizados correctamente.";
+            }
+        }
+        return "Error: El encuentro no existe.";
+    }
+
+    public String deleteEncounter(String code) throws SQLException {
+        String query = "DELETE FROM ENCUENTRO WHERE CODIGO = ?";
+        try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query)) {
+            ps.setString(1, code);
+            if (ps.executeUpdate() > 0) {
+                loadEncounters();
+                return "El encuentro con el codigo: '" + code + "' se ha eliminado correctamente.";
+            }
+        }
+        return "Error: No se encontró el encuentro con el codigo'" + code + "'.";
+    }
 }
-
-
