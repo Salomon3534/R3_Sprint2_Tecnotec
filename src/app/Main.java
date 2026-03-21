@@ -7,29 +7,27 @@ import view.ViewEuskalEncounter;
 
 public class Main {
 
-    public static void main(String[] args) {
-        try {
+	public static void main(String[] args) {
+		try {
 
-            DatabaseConnector.getConexion(); 
-            
+			DatabaseConnector.getConexion();
 
-            TotalManagerEuskalEncounter managerTotal = new TotalManagerEuskalEncounter();
-            
+			TotalManagerEuskalEncounter managerTotal = new TotalManagerEuskalEncounter();
 
-            ViewEuskalEncounter view = new ViewEuskalEncounter(managerTotal);
-            
-            //loop principal del proyecto
-            view.mainMenu();
-            
-            //fin y cierre
-            DatabaseConnector.cerrarConexion();
-            
-        } catch (SQLException e) {
+			ViewEuskalEncounter view = new ViewEuskalEncounter(managerTotal);
 
-            System.err.println("error al iniciar la aplicacion: " + e.getMessage());
-        } catch (Exception e) {
+			// loop principal de la app
+			view.mainMenu();
 
-            System.err.println("error inesperado: " + e.getMessage());
-        }
-    }
+			// fin y cierre
+			DatabaseConnector.cerrarConexion();
+
+		} catch (SQLException e) {
+
+			System.err.println("error al iniciar la aplicacion: " + e.getMessage());
+		} catch (Exception e) {
+
+			System.err.println("error inesperado: " + e.getMessage());
+		}
+	}
 }

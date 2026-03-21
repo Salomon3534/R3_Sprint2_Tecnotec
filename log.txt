@@ -8,3 +8,14 @@
 [2026-03-21 21:53:07] ACTION: DELETE ENCOUNTER - Código: 4 | Encuentro #4 eliminado.
 [2026-03-21 21:55:09] ACTION: CREATE EVENT - Título: Moronga | Error SQL al insertar: Check constraint 'evento_chk_2' is violated.
 [2026-03-21 21:57:15] ACTION: CREATE EVENT - Título: Moronga  | Evento 'Moronga ' creado con éxito.
+[2026-03-21 22:28:39] ACTION: FATAL ERROR - Inicialización fallida: Column 'NOMBRE' not found.
+[2026-03-21 22:29:07] ACTION: FATAL ERROR - Inicialización fallida: Column 'NOMBRE' not found.
+[2026-03-21 22:31:14] ACTION: FATAL ERROR - Inicialización fallida: Column 'NOMBRE' not found.
+[2026-03-21 22:40:59] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-21 22:45:29] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-21 22:46:20] ACTION: CREATE EVENTO - Título: o | Evento 'o' creado con éxito.
+[2026-03-21 23:08:36] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-21 23:13:52] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-21 23:15:34] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-21 23:18:02] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-21 23:23:05] ACTION: SISTEMA - Managers instanciados y listos.
