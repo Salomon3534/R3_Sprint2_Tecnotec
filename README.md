@@ -1,6 +1,33 @@
-Teniendo en cuenta lo aprendido en la unidad 8, escala a una nueva versión la aplicación de Administrador y Usuario para que cumpla los siguientes requisitos: 
+Sprint 2: Persistencia y Gestión de Logs
 
-SPRINT 2:
-    Modificación del sistema de gestión para permitir que los datos se guarden de manera PERSISTENTE en la BASE DE DATOS de vuestro proyecto.
-    Creación de un fichero "log.txt" en la misma carpeta de la aplicación principal en donde se almacenará una linea descriptiva para cada una de las acciones que se realizan contra la Base de Datos. 
-    Creación de una nueva opción en el menu del administrador. "Leer fichero log.txt". Mostrará en consola toda la información del fichero. 
+Actualización del sistema de administración y usuario basada en la Unidad 8, integrando almacenamiento permanente y trazabilidad de operaciones.
+
+Requisitos Implementados
+
+1. Persistencia en Base de Datos
+
+Se ha migrado el sistema de gestión de datos para abandonar el almacenamiento volátil en memoria.
+
+    Tecnología: SQL (MySQL).
+
+    Objetivo: Garantizar que los datos de usuarios y administradores se mantengan guardados tras cerrar la aplicación.
+
+    Acciones: Todas las operaciones CRUD.
+
+2. Sistema de Trazabilidad (log.txt)
+
+Implementación de un sistema de registro de eventos automático.
+
+    Ubicación: Raíz de la aplicación principal.
+
+    Funcionamiento: Cada vez que se realiza una acción contra la Base de Datos, se genera una nueva línea descriptiva en el fichero.
+
+    Formato del log: [FECHA HORAS:MIN:SEG] - ACCIÓN: [Descripción de la consulta]
+
+3. Panel de Auditoría para Administradores
+
+Nueva funcionalidad añadida al menú de control:
+
+    Opción: Leer fichero log.txt.
+
+    Descripción: Permite al administrador visualizar por consola todo el historial de movimientos registrados en el sistema de logs sin necesidad de abrir el archivo externamente.
