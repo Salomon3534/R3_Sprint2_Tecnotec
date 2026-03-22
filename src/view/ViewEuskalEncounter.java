@@ -66,7 +66,7 @@ public class ViewEuskalEncounter {
 			System.out.println("2. Gestionar Encuentros");
 			System.out.println("3. Gestionar Eventos");
 			System.out.println("4. Gestionar Invitados");
-			System.out.println("5. Leer fichero log.txt");
+			System.out.println("5. Leer fichero log (historial de acciones)");
 			System.out.println("0. Volver");
 			System.out.print("Seleccione acción (0-5): ");
 
