@@ -2,36 +2,22 @@ package model;
 
 import java.util.Objects;
 
-public class Attendant {
+public class User {
 
-	private int id;
 	private String dni;
 	private String name;
 	private String surname;
 	private String email;
 
 	// constructores
-	public Attendant(String dni, String name, String surname, String email) {
+	public User(String dni, String name, String surname, String email) {
 		this.dni = dni;
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
 	}
 
-	public Attendant(int id, String dni, String name, String surname, String email) {
-		this(dni, name, surname, email); // llamada al constructor de arriba
-		this.id = id;
-	}
-
 	// getters y setters
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getDni() {
 		return dni;
@@ -67,25 +53,29 @@ public class Attendant {
 
 	@Override
 	public String toString() {
-		return "\n" + "**************************************************\n" + "         FICHA DE ASISTENTE: "
+		return "\n" + "**************************************************\n" + "         FICHA DE USUARIO: "
 				+ (dni != null ? dni.toUpperCase() : "N/A") + "\n"
-				+ "**************************************************\n" + " > ID:        " + id + "\n"
+				+ "**************************************************\n" 
 				+ " > DNI:       " + dni + "\n" + " > NOMBRE:    " + name + " " + surname + "\n" + " > EMAIL:     "
 				+ email + "\n" + "**************************************************";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, dni);
+		return Objects.hash(dni);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null || getClass() != obj.getClass())
+		if (obj == null)
 			return false;
-		Attendant other = (Attendant) obj;
-		return id == other.id || Objects.equals(dni, other.dni);
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(dni, other.dni);
 	}
+
+
 }

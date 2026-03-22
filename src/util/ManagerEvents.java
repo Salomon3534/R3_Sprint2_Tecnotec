@@ -96,7 +96,7 @@ public class ManagerEvents {
 				con.rollback();
 				return "Error SQL al insertar: " + ex.getMessage();
 
-			} finally {
+			} finally { // que lo va a ejecutar siempre si o si
 				con.setAutoCommit(true);
 			}
 

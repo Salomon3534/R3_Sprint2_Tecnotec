@@ -62,33 +62,22 @@ public class ViewEuskalEncounter {
 			System.out.println("\n===========================");
 			System.out.println("   PANEL DE ADMINISTRADOR  ");
 			System.out.println("===========================");
-			System.out.println("1. Gestionar Atendientes");
+			System.out.println("1. Gestionar Usuarios");
 			System.out.println("2. Gestionar Encuentros");
 			System.out.println("3. Gestionar Eventos");
 			System.out.println("4. Gestionar Invitados");
 			System.out.println("5. Leer fichero log.txt");
 			System.out.println("0. Volver");
-			System.out.print("Seleccione entidad (0-5): ");
+			System.out.print("Seleccione acción (0-5): ");
 
 			entity = checksInputOutput.getInt(0, 5);
 
-			if (entity == 5) {
-				System.out.println(totalManager.showLogFile());
-			} else if (entity != 0) {
-				int action = showActionMenu(switch (entity) {
-				case 1 -> "Atendientes";
-				case 2 -> "Encuentros";
-				case 3 -> "Eventos";
-				case 4 -> "Invitados";
-				default -> "";
-				});
-
-				switch (entity) {
-				case 1 -> manageAttendants(action);
-				case 2 -> manageEncounters(action);
-				case 3 -> manageEvents(action);
-				case 4 -> manageGuests(action);
-				}
+			switch (entity) {
+			case 1 -> manageUsers();
+			case 2 -> manageEncounters();
+			case 3 -> manageEvents();
+			case 4 -> manageGuests();
+			case 5 -> System.out.println(totalManager.showLogFile());
 			}
 		} while (entity != 0);
 	}
@@ -99,210 +88,288 @@ public class ViewEuskalEncounter {
 		System.out.println("2. Listar");
 		System.out.println("3. Actualizar");
 		System.out.println("4. Eliminar");
-		System.out.println("0. Volver");
+		System.out.println("0. Volver al Panel de Administrador");
 		System.out.print("Acción (0-4): ");
 		return checksInputOutput.getInt(0, 4);
 	}
 
-	// --- GESTIÓN DE EVENTOS ---
-	private void manageEvents(int action) {
-		if (action == 0)
-			return;
-		try {
-			switch (action) {
-			case 1 -> {
-				System.out.println("\n--- SELECCIONAR TIPO DE EVENTO ---");
-				System.out.println(
-						"1. Conferencia Magistral | 2. Taller Práctico | 3. Presentación | 4. Mesa Redonda | 5. General");
-				int type = checksInputOutput.getInt(1, 5);
-				System.out.println(totalManager.createEvent(requestEventData(0, type)));
+	// EVENTOS
+	private void manageEvents() {
+		int action;
+		do {
+			action = showActionMenu("Eventos");
+			if (action == 0)
+				break;
+
+			try {
+				switch (action) {
+				case 1 -> {
+					System.out.println("\n--- SELECCIONAR TIPO DE EVENTO ---");
+					System.out.println("1. Conferencia Magistral");
+					System.out.println("2. Taller Práctico");
+					System.out.println("3. Presentación");
+					System.out.println("4. Mesa Redonda");
+					System.out.println("5. General");
+					int type = checksInputOutput.getInt(1, 5);
+					System.out.println(totalManager.createEvent(requestEventData(0, type)));
+				}
+				case 2 -> System.out.println(totalManager.listEvents());
+				case 3 -> {
+					System.out.println(totalManager.listEvents());
+					System.out.print("\nID del evento a modificar (número entero): ");
+					int id = checksInputOutput.getInt(1, 99999);
+
+					System.out.println("Seleccione el nuevo tipo/clase:");
+					System.out.println("1. Conferencia Magistral");
+					System.out.println("2. Taller Práctico");
+					System.out.println("3. Presentación");
+					System.out.println("4. Mesa Redonda");
+					System.out.println("5. General");
+
+					int type = checksInputOutput.getInt(1, 5);
+					System.out.println(totalManager.updateEvent(requestEventData(id, type)));
+				}
+				case 4 -> {
+					System.out.println(totalManager.listEvents());
+					System.out.print("ID del evento a ELIMINAR (número entero): ");
+					int id = checksInputOutput.getInt(1, 99999);
+					System.out.println(totalManager.deleteEvent(id));
+				}
+				}
+			} catch (Exception e) {
+				System.err.println("\nError en gestión de eventos: " + e.getMessage());
 			}
-			case 2 -> System.out.println(totalManager.listEvents());
-			case 3 -> {
-				System.out.print("\nID del evento a modificar: ");
-				int id = checksInputOutput.getInt(1, 99999);
-				System.out.println("Seleccione el nuevo tipo/clase:");
-				int type = checksInputOutput.getInt(1, 5);
-				System.out.println(totalManager.updateEvent(requestEventData(id, type)));
-			}
-			case 4 -> {
-				System.out.print("ID del evento a ELIMINAR: ");
-				int id = checksInputOutput.getInt(1, 99999);
-				System.out.println(totalManager.deleteEvent(id));
-			}
-			}
-		} catch (Exception e) {
-			System.err.println("\nError en gestión de eventos: " + e.getMessage());
-		}
+		} while (action != 0);
 	}
 
 	private Event requestEventData(int id, int typeChoice) {
-		System.out.print("Título: ");
+
+		System.out.print("Título (máx 100 caracteres): ");
 		String title = checksInputOutput.getString("", 100);
-		System.out.print("Ubicación: ");
+
+		System.out.print("Ubicación (máx 150 caracteres): ");
 		String loc = checksInputOutput.getString("", 150);
-		System.out.print("Descripción: ");
+
+		System.out.print("Descripción (máx 255 caracteres): ");
 		String desc = checksInputOutput.getString("", 255);
-		System.out.print("Fecha Inicio (AAAA-MM-DD): ");
+
+		System.out.print("Fecha Inicio (formato YYYY-MM-DD, ej: 2026-03-22): ");
 		Date dS = Date.valueOf(checksInputOutput.getString("", 10));
-		System.out.print("Fecha Fin (AAAA-MM-DD): ");
+
+		System.out.print("Fecha Fin (formato YYYY-MM-DD, ej: 2026-03-25): ");
 		Date dE = Date.valueOf(checksInputOutput.getString("", 10));
-		System.out.print("Hora Inicio (HH:MM:SS): ");
+
+		System.out.print("Hora Inicio (formato HH:MM:SS, ej: 14:30:00): ");
 		Time hS = Time.valueOf(checksInputOutput.getString("", 8));
-		System.out.print("Hora Fin (HH:MM:SS): ");
+
+		System.out.print("Hora Fin (formato HH:MM:SS, ej: 18:00:00): ");
 		Time hE = Time.valueOf(checksInputOutput.getString("", 8));
-		System.out.print("Código Encuentro (FK): ");
+
+		System.out.print("Código Encuentro (FK, número entero): ");
 		int fk = checksInputOutput.getInt(1, 999999);
 
 		return switch (typeChoice) {
 		case 1 -> {
-			System.out.print("Tipo de Conferencia: ");
+			System.out.print("Tipo de Conferencia (texto): ");
 			yield new KeynoteSpeech(id, title, loc, desc, dS, dE, hS, hE, fk, checksInputOutput.getString("", 100));
 		}
 		case 2 -> {
-			System.out.print("Número de Taller: ");
+			System.out.print("Número de Taller (entero): ");
 			yield new PracticalWorkshop(id, title, loc, desc, dS, dE, hS, hE, fk, checksInputOutput.getInt(1, 999));
 		}
 		case 3 -> {
-			System.out.print("Tipo de Proyecto: ");
+			System.out.print("Tipo de Proyecto (texto): ");
 			String tp = checksInputOutput.getString("", 100);
-			System.out.print("Descripción Detallada: ");
+			System.out.print("Descripción Detallada (máx 500 caracteres): ");
 			String dp = checksInputOutput.getString("", 500);
 			yield new ProjectPresentation(id, title, loc, desc, dS, dE, hS, hE, fk, tp, dp);
 		}
 		case 4 -> {
-			System.out.print("Número de Conferencia: ");
+			System.out.print("Número de Conferencia (entero): ");
 			yield new RoundTable(id, title, loc, desc, dS, dE, hS, hE, fk, checksInputOutput.getInt(1, 999));
 		}
 		default -> new Event(id, title, loc, desc, dS, dE, hS, hE, fk);
 		};
 	}
 
-	// --- GESTIÓN DE ENCUENTROS ---
-	private void manageEncounters(int action) {
-		if (action == 0)
-			return;
-		try {
-			switch (action) {
-			case 1 -> {
-				// ACTUALIZADO: Se elimina la petición del nombre para cumplir con la DB
-				System.out.print("Ubicación: ");
-				String loc = checksInputOutput.getString("", 150);
-				System.out.print("Fecha Inicio (AAAA-MM-DD): ");
-				Date start = Date.valueOf(checksInputOutput.getString("", 10));
-				System.out.print("Fecha Fin (AAAA-MM-DD): ");
-				Date end = Date.valueOf(checksInputOutput.getString("", 10));
-				System.out.println(totalManager.createEncounter(loc, start, end));
+	// ENCUENTROS
+	private void manageEncounters() {
+		int action;
+		do {
+			action = showActionMenu("Encuentros");
+			if (action == 0)
+				break;
+
+			try {
+				switch (action) {
+				case 1 -> {
+					System.out.print("Ubicación (máx 150 caracteres): ");
+					String loc = checksInputOutput.getString("", 150);
+
+					System.out.print("Fecha Inicio (YYYY-MM-DD, ej: 2026-03-22): ");
+					Date start = Date.valueOf(checksInputOutput.getString("", 10));
+
+					System.out.print("Fecha Fin (YYYY-MM-DD, ej: 2026-03-25): ");
+					Date end = Date.valueOf(checksInputOutput.getString("", 10));
+
+					System.out.println(totalManager.createEncounter(loc, start, end));
+				}
+				case 2 -> System.out.println(totalManager.listEncounters());
+				case 3 -> {
+					System.out.println(totalManager.listEncounters());
+					System.out.println(totalManager.updateEncounter(getEncounterData()));
+				}
+				case 4 -> {
+					System.out.println(totalManager.listEncounters());
+					System.out.print("ID del encuentro a ELIMINAR (entero): ");
+					System.out.println(totalManager.deleteEncounter(checksInputOutput.getInt(1, 99999)));
+				}
+				}
+			} catch (Exception e) {
+				System.err.println("Error: " + e.getMessage());
 			}
-			case 2 -> System.out.println(totalManager.listEncounters());
-			case 3 -> System.out.println(totalManager.updateEncounter(getEncounterData()));
-			case 4 -> {
-				System.out.print("ID del encuentro a ELIMINAR: ");
-				System.out.println(totalManager.deleteEncounter(checksInputOutput.getInt(1, 99999)));
-			}
-			}
-		} catch (Exception e) {
-			System.err.println("Error: " + e.getMessage());
-		}
+		} while (action != 0);
 	}
 
 	private Encounter getEncounterData() {
-		System.out.print("ID del encuentro: ");
+		System.out.print("ID del encuentro (entero): ");
 		int id = checksInputOutput.getInt(1, 9999);
-		System.out.print("Nueva Ubicación: ");
+
+		System.out.print("Nueva Ubicación (máx 150 caracteres): ");
 		String loc = checksInputOutput.getString("", 150);
-		System.out.print("Nueva Fecha Inicio: ");
+
+		System.out.print("Nueva Fecha Inicio (YYYY-MM-DD): ");
 		Date dS = Date.valueOf(checksInputOutput.getString("", 10));
-		System.out.print("Nueva Fecha Fin: ");
+
+		System.out.print("Nueva Fecha Fin (YYYY-MM-DD): ");
 		Date dE = Date.valueOf(checksInputOutput.getString("", 10));
-		// Nota: Asegúrate de que el constructor de Encounter coincida con estos
-		// parámetros
+
 		return new Encounter(id, loc, dS, dE);
 	}
 
-	// --- GESTIÓN DE INVITADOS ---
-	private void manageGuests(int action) {
-		if (action == 0)
-			return;
-		switch (action) {
-		case 1 -> {
-			System.out.print("Username: ");
-			String u = checksInputOutput.getString("", 50);
-			System.out.print("Nombre: ");
-			String n = checksInputOutput.getString("", 100);
-			System.out.print("Apellidos: ");
-			String l = checksInputOutput.getString("", 150);
-			System.out.print("Teléfono: ");
-			String t = checksInputOutput.getString("", 15);
-			System.out.print("Carrera: ");
-			String c = checksInputOutput.getString("", 200);
-			System.out.print("Email: ");
-			String e = checksInputOutput.leerEmail("", 150);
-			System.out.print("Password: ");
-			String p = checksInputOutput.getString("", 255);
-			System.out.println(totalManager.createGuest(u, n, l, t, c, e, p));
-		}
-		case 2 -> System.out.println(totalManager.listGuests());
-		case 3 -> System.out.println(totalManager.updateGuest(getGuestData()));
-		case 4 -> {
-			System.out.print("Username a eliminar: ");
-			System.out.println(totalManager.deleteGuest(checksInputOutput.getString("", 50)));
-		}
-		}
+	// INVITADOS
+	private void manageGuests() {
+		int action;
+		do {
+			action = showActionMenu("Invitados");
+			if (action == 0)
+				break;
+
+			switch (action) {
+			case 1 -> {
+				System.out.print("Username (máx 50 caracteres): ");
+				String u = checksInputOutput.getString("", 50);
+
+				System.out.print("Nombre (máx 100 caracteres): ");
+				String n = checksInputOutput.getString("", 100);
+
+				System.out.print("Apellidos (máx 150 caracteres): ");
+				String l = checksInputOutput.getString("", 150);
+
+				System.out.print("Teléfono (solo números, máx 15 dígitos): ");
+				String t = checksInputOutput.getString("", 15);
+
+				System.out.print("Carrera (texto): ");
+				String c = checksInputOutput.getString("", 200);
+
+				System.out.print("Email (ej: usuario@email.com): ");
+				String e = checksInputOutput.getEmail("", 150);
+
+				System.out.print("Password (máx 255 caracteres): ");
+				String p = checksInputOutput.getString("", 255);
+
+				System.out.println(totalManager.createGuest(u, n, l, t, c, e, p));
+			}
+			case 2 -> System.out.println(totalManager.listGuests());
+			case 3 -> {
+				System.out.println(totalManager.listGuests());
+				System.out.println(totalManager.updateGuest(getGuestData()));
+			}
+			case 4 -> {
+				System.out.println(totalManager.listGuests());
+				System.out.print("Username a eliminar: ");
+				System.out.println(totalManager.deleteGuest(checksInputOutput.getString("", 50)));
+			}
+			}
+		} while (action != 0);
 	}
 
 	private Guest getGuestData() {
 		System.out.print("Username actual: ");
 		String u = checksInputOutput.getString("", 50);
+
 		System.out.print("Nombre: ");
 		String n = checksInputOutput.getString("", 100);
+
 		System.out.print("Apellidos: ");
 		String l = checksInputOutput.getString("", 150);
-		System.out.print("Teléfono: ");
+
+		System.out.print("Teléfono (solo números): ");
 		String t = checksInputOutput.getString("", 15);
+
 		System.out.print("Carrera: ");
 		String c = checksInputOutput.getString("", 200);
-		System.out.print("Email: ");
-		String e = checksInputOutput.leerEmail("", 150);
+
+		System.out.print("Email (ej: usuario@email.com): ");
+		String e = checksInputOutput.getEmail("", 150);
+
 		System.out.print("Password: ");
 		String p = checksInputOutput.getString("", 255);
+
 		return new Guest(u, n, l, t, c, e, p);
 	}
 
-	// --- GESTIÓN DE ATENDIENTES ---
-	private void manageAttendants(int action) {
-		if (action == 0)
-			return;
-		switch (action) {
-		case 1 -> {
-			System.out.print("DNI: ");
-			String d = checksInputOutput.getString("", 9);
-			System.out.print("Nombre: ");
-			String n = checksInputOutput.getString("", 100);
-			System.out.print("Apellido: ");
-			String l = checksInputOutput.getString("", 150);
-			System.out.print("Email: ");
-			String e = checksInputOutput.leerEmail("", 150);
-			System.out.println(totalManager.createAttendant(d, n, l, e));
-		}
-		case 2 -> System.out.println(totalManager.listAttendants());
-		case 3 -> System.out.println(totalManager.updateAttendant(getAttendantData()));
-		case 4 -> {
-			System.out.print("DNI a eliminar: ");
-			System.out.println(totalManager.deleteAttendant(checksInputOutput.getString("", 20)));
-		}
-		}
+	// USUARIOS
+	private void manageUsers() {
+		int action;
+		do {
+			action = showActionMenu("Usuarios");
+			if (action == 0)
+				break;
+
+			switch (action) {
+			case 1 -> {
+				System.out.print("DNI (formato: 12345678A): ");
+				String d = checksInputOutput.getString("", 9);
+
+				System.out.print("Nombre: ");
+				String n = checksInputOutput.getString("", 100);
+
+				System.out.print("Apellido: ");
+				String l = checksInputOutput.getString("", 150);
+
+				System.out.print("Email (ej: usuario@email.com): ");
+				String e = checksInputOutput.getEmail("", 150);
+
+				System.out.println(totalManager.createUser(d, n, l, e));
+			}
+			case 2 -> System.out.println(totalManager.listUsers());
+			case 3 -> {
+				System.out.println(totalManager.listUsers());
+				System.out.println(totalManager.updateUser(getUserData()));
+			}
+			case 4 -> {
+				System.out.println(totalManager.listUsers());
+				System.out.print("DNI a eliminar: ");
+				System.out.println(totalManager.deleteUser(checksInputOutput.getString("", 20)));
+			}
+			}
+		} while (action != 0);
 	}
 
-	private Attendant getAttendantData() {
-		System.out.print("DNI actual: ");
+	private User getUserData() {
+		System.out.print("DNI actual (formato 12345678A): ");
 		String d = checksInputOutput.getString("", 20);
+
 		System.out.print("Nombre: ");
 		String n = checksInputOutput.getString("", 100);
+
 		System.out.print("Apellido: ");
 		String l = checksInputOutput.getString("", 150);
-		System.out.print("Email: ");
-		String e = checksInputOutput.leerEmail("", 150);
-		return new Attendant(d, n, l, e);
+
+		System.out.print("Email (ej: usuario@email.com): ");
+		String e = checksInputOutput.getEmail("", 150);
+
+		return new User(d, n, l, e);
 	}
 }

@@ -8,7 +8,9 @@ public class ManagerEncounters {
 
 	public String createEncounter(String location, Date dateStart, Date dateEnd) throws SQLException {
 		String sql = "INSERT INTO encuentro (FECHA_INICIO, FECHA_FIN, UBICACION) VALUES (?, ?, ?)";
-		try (Connection conn = DatabaseConnector.getConexion(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (Connection conn = DatabaseConnector.getConexion();
+
+				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setDate(1, dateStart);
 			pstmt.setDate(2, dateEnd);
@@ -23,6 +25,7 @@ public class ManagerEncounters {
 		String sql = "SELECT CODIGO, FECHA_INICIO, FECHA_FIN, UBICACION FROM encuentro";
 
 		try (Connection conn = DatabaseConnector.getConexion();
+
 				PreparedStatement pstmt = conn.prepareStatement(sql);
 				ResultSet rs = pstmt.executeQuery()) {
 

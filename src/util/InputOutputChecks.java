@@ -75,7 +75,7 @@ public class InputOutputChecks {
 		return cleanDate;
 	}
 
-	public LocalTime leerHora(String mensaje, String formatoPatron) {
+	public LocalTime getHour(String mensaje, String formatoPatron) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatoPatron);
 		LocalTime hora = null;
 		boolean valida = false;
@@ -94,15 +94,15 @@ public class InputOutputChecks {
 		return hora;
 	}
 
-	public String leerEmail(String mensaje, int longitudMax) {
+	public String getEmail(String mensaje, int longitudMax) {
 		String texto = "";
 		while (true) {
 			try {
-				System.out.print(mensaje);
+				System.out.print(mensaje + " (formato: usuario@dominio.com): ");
 				texto = sc.nextLine();
 
-				if (!texto.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$")) {
-					throw new Exception("Formato de email no válido");
+				if (!texto.matches("^[\\w.-]+@([\\w-]+\\.)+[a-zA-Z]{2,}$")) {
+					throw new Exception("Formato de email no válido (ej: usuario@dominio.com)");
 				}
 
 				if (texto.length() > longitudMax) {
