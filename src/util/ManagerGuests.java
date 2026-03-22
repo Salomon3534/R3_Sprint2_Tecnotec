@@ -32,7 +32,7 @@ public class ManagerGuests {
 	}
 
 	public String createGuest(String username, String name, String surnames, String phone, String career, String email,
-			String pass) throws SQLException {
+			String password) throws SQLException {
 		String query = "INSERT INTO invitados (NOMBRE_USUARIO, NOMBRE, APELLIDOS, TELEFONO, DESCRIPCION_RECORRIDO, EMAIL, CONTRASENA) VALUES (?,?,?,?,?,?,?)";
 
 		try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query)) {
@@ -42,7 +42,7 @@ public class ManagerGuests {
 			ps.setString(4, phone);
 			ps.setString(5, career);
 			ps.setString(6, email);
-			ps.setString(7, pass);
+			ps.setString(7, password);
 			ps.executeUpdate();
 		}
 		loadGuests();

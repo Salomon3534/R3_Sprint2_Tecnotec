@@ -9,7 +9,7 @@ public class TotalManagerEuskalEncounter {
 	private ManagerEncounters managerEncounters = new ManagerEncounters();
 	private ManagerEvents managerEvents = new ManagerEvents();
 	private ManagerGuests managerGuests = new ManagerGuests();
-	private ManagerAttendants managerAttendants = new ManagerAttendants();
+	private ManagerUsers managerUsers = new ManagerUsers();
 	private Logger logger = new Logger();
 
 	public TotalManagerEuskalEncounter() throws SQLException {
@@ -135,41 +135,41 @@ public class TotalManagerEuskalEncounter {
 		}
 	}
 
-	// ASISTENTES
-	public String createAttendant(String dni, String name, String last, String email) {
+	// USUARIOS
+	public String createUser(String dni, String name, String last, String email) {
 		try {
-			String result = managerAttendants.createAttendant(dni, name, last, email);
-			logger.writeLog("CREATE ASISTENTE - DNI: " + dni + " | " + result);
+			String result = managerUsers.createUser(dni, name, last, email);
+			logger.writeLog("CREATE USUARIO - DNI: " + dni + " | " + result);
 			return result;
 		} catch (SQLException e) {
-			logger.writeLog("ERROR SQL (createAttendant): " + e.getMessage());
-			return "Error al registrar asistente.";
+			logger.writeLog("ERROR SQL (createUser): " + e.getMessage());
+			return "Error al registrar usuario.";
 		}
 	}
 
-	public String listAttendants() {
-		return managerAttendants.listAttendants();
+	public String listUsers() {
+		return managerUsers.listUsers();
 	}
 
-	public String updateAttendant(Attendant a) {
+	public String updateUser(User u) {
 		try {
-			String result = managerAttendants.updateAttendant(a);
-			logger.writeLog("UPDATE ASISTENTE - DNI: " + a.getDni() + " | " + result);
+			String result = managerUsers.updateUser(u);
+			logger.writeLog("UPDATE USUARIO - DNI: " + u.getDni() + " | " + result);
 			return result;
 		} catch (SQLException e) {
-			logger.writeLog("ERROR SQL (updateAttendant): " + e.getMessage());
-			return "Error al actualizar asistente.";
+			logger.writeLog("ERROR SQL (updateUser): " + e.getMessage());
+			return "Error al actualizar usuario.";
 		}
 	}
 
-	public String deleteAttendant(String dni) {
+	public String deleteUser(String dni) {
 		try {
-			String result = managerAttendants.deleteAttendant(dni);
-			logger.writeLog("DELETE ASISTENTE - DNI: " + dni + " | " + result);
+			String result = managerUsers.deleteUser(dni);
+			logger.writeLog("DELETE USUARIO - DNI: " + dni + " | " + result);
 			return result;
 		} catch (SQLException e) {
-			logger.writeLog("ERROR SQL (deleteAttendant): " + e.getMessage());
-			return "Error al eliminar asistente.";
+			logger.writeLog("ERROR SQL (deleteUser): " + e.getMessage());
+			return "Error al eliminar usuario.";
 		}
 	}
 }

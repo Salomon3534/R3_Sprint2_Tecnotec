@@ -19,3 +19,32 @@
 [2026-03-21 23:15:34] ACTION: SISTEMA - Managers instanciados y listos.
 [2026-03-21 23:18:02] ACTION: SISTEMA - Managers instanciados y listos.
 [2026-03-21 23:23:05] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-21 23:49:20] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-21 23:52:14] ACTION: CREATE ASISTENTE - DNI: 55555555C | ¡Usuario 'Jordi' creado con éxito!
+[2026-03-21 23:55:19] ACTION: UPDATE ASISTENTE - DNI: 77777777G | Datos de 'Urkijo' actualizados correctamente.
+[2026-03-21 23:56:39] ACTION: DELETE ASISTENTE - DNI: 77777777g | El usuario con DNI: '77777777g' se ha eliminado correctamente.
+[2026-03-21 23:57:11] ACTION: CREATE ENCUENTRO - Ubicación: Polonia | Encuentro creado correctamente.
+[2026-03-21 23:58:23] ACTION: UPDATE ENCUENTRO - Código: 3 | Encuentro actualizado.
+[2026-03-22 00:00:09] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-22 00:00:54] ACTION: DELETE ENCUENTRO - Código: 1 | Encuentro eliminado.
+[2026-03-22 00:02:37] ACTION: CREATE EVENTO - Título: Omega | Evento 'Omega' creado con éxito.
+[2026-03-22 00:04:44] ACTION: UPDATE EVENTO - ID: 15 | Evento actualizado con éxito.
+[2026-03-22 00:05:02] ACTION: DELETE EVENTO - ID: 15 | Evento eliminado.
+[2026-03-22 00:05:28] ACTION: ERROR SQL (createGuest): Check constraint 'invitados_chk_1' is violated.
+[2026-03-22 00:05:52] ACTION: ERROR SQL (createGuest): Check constraint 'invitados_chk_1' is violated.
+[2026-03-22 00:06:38] ACTION: ERROR SQL (createGuest): Check constraint 'invitados_chk_1' is violated.
+[2026-03-22 00:09:52] ACTION: UPDATE INVITADO - Usuario: inv3 | Datos de 'inv3' actualizados correctamente.
+[2026-03-22 00:10:19] ACTION: DELETE INVITADO - Usuario: inv4 | Invitado 'inv4' eliminado correctamente.
+[2026-03-22 20:58:39] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-22 21:06:52] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-22 21:07:39] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-22 21:08:14] ACTION: CREATE USUARIO - DNI: 34363436Z | ¡Usuario 'Joseph' creado con éxito!
+[2026-03-22 21:10:05] ACTION: CREATE INVITADO - Usuario: Valentin | ¡Invitado 'Valentin' creado con éxito!
+[2026-03-22 21:12:05] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-22 21:14:42] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-22 21:16:07] ACTION: CREATE EVENTO - Título: Io | Evento 'Io' creado con éxito.
+[2026-03-22 21:16:31] ACTION: DELETE EVENTO - ID: 16 | Evento eliminado.
+[2026-03-22 21:18:14] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-22 21:21:02] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-22 21:22:55] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-22 21:26:25] ACTION: UPDATE ENCUENTRO - Código: 2 | Encuentro actualizado.

@@ -5,29 +5,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import db.DatabaseConnector;
-import model.Attendant;
+import model.User;
 
-public class ManagerAttendants {
+public class ManagerUsers {
 
-	private ArrayList<Attendant> attendantsList = new ArrayList<>();
+	private ArrayList<User> usersList = new ArrayList<>();
 
-	public ManagerAttendants() throws SQLException {
-		loadAttendants();
+	public ManagerUsers() throws SQLException {
+		loadUsers();
 	}
 
-	public void loadAttendants() throws SQLException {
-		attendantsList.clear();
+	public void loadUsers() throws SQLException {
+		usersList.clear();
 		String query = "SELECT * FROM USUARIO";
 		try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query);
 				ResultSet rs = ps.executeQuery()) {
 			while (rs.next()) {
-				attendantsList.add(new Attendant(rs.getString("DNI"), rs.getString("NOMBRE"), rs.getString("APELLIDO"),
+				usersList.add(new User(rs.getString("DNI"), rs.getString("NOMBRE"), rs.getString("APELLIDO"),
 						rs.getString("EMAIL")));
 			}
 		}
 	}
 
-	public String createAttendant(String dni, String name, String surname, String email) throws SQLException {
+	public String createUser(String dni, String name, String surname, String email) throws SQLException {
 		String query = "INSERT INTO USUARIO (DNI, NOMBRE, APELLIDO, EMAIL) VALUES (?, ?, ?, ?)";
 		try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query)) {
 			ps.setString(1, dni);
@@ -36,40 +36,40 @@ public class ManagerAttendants {
 			ps.setString(4, email);
 			ps.executeUpdate();
 		}
-		loadAttendants();
+		loadUsers();
 		return "¡Usuario '" + name + "' creado con éxito!";
 	}
 
-	public String listAttendants() {
-		if (attendantsList.isEmpty())
+	public String listUsers() {
+		if (usersList.isEmpty())
 			return "No hay usuarios registrados.";
 		StringBuilder sb = new StringBuilder();
-		for (Attendant a : attendantsList)
-			sb.append(a.toString()).append("\n");
+		for (User u : usersList)
+			sb.append(u.toString()).append("\n");
 		return sb.toString();
 	}
 
-	public String updateAttendant(Attendant a) throws SQLException {
+	public String updateUser(User u) throws SQLException {
 		String query = "UPDATE USUARIO SET NOMBRE=?, APELLIDO=?, EMAIL=? WHERE DNI=?";
 		try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query)) {
-			ps.setString(1, a.getName());
-			ps.setString(2, a.getSurname());
-			ps.setString(3, a.getEmail());
-			ps.setString(4, a.getDni());
+			ps.setString(1, u.getName());
+			ps.setString(2, u.getSurname());
+			ps.setString(3, u.getEmail());
+			ps.setString(4, u.getDni());
 			if (ps.executeUpdate() > 0) {
-				loadAttendants();
-				return "Datos de '" + a.getName() + "' actualizados correctamente.";
+				loadUsers();
+				return "Datos de '" + u.getName() + "' actualizados correctamente.";
 			}
 		}
 		return "Error: El usuario no existe.";
 	}
 
-	public String deleteAttendant(String dni) throws SQLException {
+	public String deleteUser(String dni) throws SQLException {
 		String query = "DELETE FROM USUARIO WHERE DNI = ?";
 		try (PreparedStatement ps = DatabaseConnector.getConexion().prepareStatement(query)) {
 			ps.setString(1, dni);
 			if (ps.executeUpdate() > 0) {
-				loadAttendants();
+				loadUsers();
 				return "El usuario con DNI: '" + dni + "' se ha eliminado correctamente.";
 			}
 		}
