@@ -55,3 +55,6 @@
 [2026-03-24 10:24:05] ACTION: SISTEMA - Managers instanciados y listos.
 [2026-03-24 10:24:05] ACTION: SISTEMA - Managers instanciados y listos.
 [2026-03-26 09:00:45] ACTION: SISTEMA - Managers instanciados y listos.
+[2026-03-26 09:49:00] ACTION: SISTEMA - Gestores instanciados y listos.
+[2026-03-26 09:49:17] ACTION: BUSCAR INVITADO - Usuario: Abel
+[2026-03-26 09:49:36] ACTION: BUSCAR INVITADO - Usuario: Valentin

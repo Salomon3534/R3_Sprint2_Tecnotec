@@ -18,7 +18,7 @@ public class Logger {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, true))) {
 
 			String timestamp = LocalDateTime.now().format(formatter);
-			writer.write("[" + timestamp + "] ACTION: " + action);
+			writer.write("[" + timestamp + "] ACCIÓN: " + action);
 			writer.newLine();
 
 		} catch (IOException e) {
