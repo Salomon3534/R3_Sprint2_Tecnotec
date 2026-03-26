@@ -65,6 +65,13 @@ public class TotalManagerEuskalEncounter {
 		}
 	}
 
+	/**
+	 * Obtiene el contador global de encuentros.
+	 */
+	public int getGlobalCounterEncounter() {
+		return managerEncounters.getGlobalCounter();
+	}
+
 	// EVENTOS
 
 	public String createEvent(Event event) {
@@ -108,6 +115,13 @@ public class TotalManagerEuskalEncounter {
 			logger.writeLog("ERROR SQL (deleteEvent): " + e.getMessage());
 			return "Error al eliminar el evento.";
 		}
+	}
+
+	/**
+	 * Obtiene el contador global de eventos.
+	 */
+	public int getGlobalCounterEvent() {
+		return managerEvents.getGlobalCounter();
 	}
 
 	// INVITADOS

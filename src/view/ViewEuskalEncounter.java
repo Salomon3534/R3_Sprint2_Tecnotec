@@ -15,7 +15,7 @@ public class ViewEuskalEncounter {
 		this.totalManager = totalManagerEuskalEncounter;
 	}
 
-	// métodos privados de validación
+	// Métodos privados de validación
 
 	private int readInt(int min, int max) {
 		while (true) {
@@ -36,16 +36,12 @@ public class ViewEuskalEncounter {
 			try {
 				System.out.print(message);
 				String texto = sc.nextLine();
-
-				if (texto.trim().isEmpty()) {
+				if (texto.trim().isEmpty())
 					throw new Exception("La entrada no puede estar vacía.");
-				}
-				if (texto.length() > maxLength) {
-					throw new Exception("Longitud máxima permitida: " + maxLength);
-				}
-				if (!texto.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9\\- .:,;]+")) {
-					throw new Exception("Contiene caracteres especiales no permitidos.");
-				}
+				if (texto.length() > maxLength)
+					throw new Exception("Longitud máxima: " + maxLength);
+				if (!texto.matches("[a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9\\- .:,;]+"))
+					throw new Exception("Caracteres no permitidos.");
 				return texto;
 			} catch (Exception e) {
 				System.out.println("Error: " + e.getMessage() + ". Reintenta:");
@@ -58,13 +54,8 @@ public class ViewEuskalEncounter {
 			try {
 				System.out.print(message + " (ejemplo: usuario@dominio.com): ");
 				String texto = sc.nextLine();
-
-				if (!texto.matches("^[\\w.-]+@([\\w-]+\\.)+[a-zA-Z]{2,}$")) {
-					throw new Exception("Formato de correo electrónico no válido.");
-				}
-				if (texto.length() > maxLength) {
-					throw new Exception("Correo electrónico demasiado largo.");
-				}
+				if (!texto.matches("^[\\w.-]+@([\\w-]+\\.)+[a-zA-Z]{2,}$"))
+					throw new Exception("Email inválido.");
 				return texto;
 			} catch (Exception e) {
 				System.out.println("Error: " + e.getMessage() + ". Reintenta:");
@@ -75,12 +66,10 @@ public class ViewEuskalEncounter {
 	private String readDni() {
 		while (true) {
 			try {
-				System.out.print("Escribe el DNI (8 números + 1 letra): ");
+				System.out.print("DNI (8 números + 1 letra): ");
 				String dni = sc.nextLine();
-
-				if (!dni.matches("^[0-9]{8}[A-Za-z]$")) {
-					throw new Exception("Formato de DNI incorrecto.");
-				}
+				if (!dni.matches("^[0-9]{8}[A-Za-z]$"))
+					throw new Exception("Formato DNI incorrecto.");
 				return dni;
 			} catch (Exception e) {
 				System.out.println("Error: " + e.getMessage() + ". Reintenta:");
@@ -88,7 +77,7 @@ public class ViewEuskalEncounter {
 		}
 	}
 
-	// menús principales
+	// Menús principales
 
 	public void mainMenu() {
 		int choice;
@@ -99,16 +88,12 @@ public class ViewEuskalEncounter {
 			System.out.println("1. Acceso Usuario (Modo Consulta)");
 			System.out.println("2. Acceso Administrador (Modo Edición)");
 			System.out.println("0. Salir");
-			System.out.print("\nOpción (0-2): ");
-
 			choice = readInt(0, 2);
 			if (choice == 1)
 				userMenu();
 			else if (choice == 2)
 				adminMenu();
 		} while (choice != 0);
-
-		System.out.println("\nSaliendo del sistema...");
 	}
 
 	private void userMenu() {
@@ -119,9 +104,7 @@ public class ViewEuskalEncounter {
 			System.out.println("2. Ver Eventos");
 			System.out.println("3. Ver Invitados");
 			System.out.println("0. Volver");
-			System.out.print("Opción (0-3): ");
 			option = readInt(0, 3);
-
 			if (option == 1)
 				System.out.println(totalManager.listEncounters());
 			else if (option == 2)
@@ -141,8 +124,6 @@ public class ViewEuskalEncounter {
 			System.out.println("4. Gestionar Invitados");
 			System.out.println("5. Leer fichero log");
 			System.out.println("0. Volver");
-			System.out.print("Seleccione (0-5): ");
-
 			entity = readInt(0, 5);
 			switch (entity) {
 			case 1 -> manageUsers();
@@ -154,60 +135,53 @@ public class ViewEuskalEncounter {
 		} while (entity != 0);
 	}
 
-	private int showActionMenu(String title) {
+	/**
+	 * Muestra el menú de acciones. Permite definir si se incluye la opción de ID
+	 * Global.
+	 */
+	private int showActionMenu(String title, boolean showExtended) {
 		System.out.println("\n>> GESTIÓN DE " + title.toUpperCase());
 		System.out.println("1. Crear");
 		System.out.println("2. Listar todos");
 		System.out.println("3. Actualizar");
 		System.out.println("4. Eliminar");
 		System.out.println("5. Buscar por identificador");
-		System.out.println("0. Volver");
-		System.out.print("Acción (0-5): ");
-		return readInt(0, 5);
+		if (showExtended) {
+			System.out.println("6. Ver próximo ID disponible");
+			System.out.print("Acción (0-6): ");
+			return readInt(0, 6);
+		} else {
+			System.out.print("Acción (0-5): ");
+			return readInt(0, 5);
+		}
 	}
 
-	// gestión de entidades
+	// Gestión de entidades
 
 	private void manageEvents() {
 		int action;
 		do {
-			action = showActionMenu("Eventos");
+			action = showActionMenu("Eventos", true);
 			if (action == 0)
 				break;
-
 			try {
 				switch (action) {
 				case 1 -> {
-					System.out.println("Seleccione Tipo:");
-					System.out.println("1. Conferencia");
-					System.out.println("2. Taller Práctico");
-					System.out.println("3. Presentación de Proyecto");
-					System.out.println("4. Mesa Redonda");
-					System.out.println("5. General");
+					System.out.println("Tipo: 1.Conf | 2.Taller | 3.Proyecto | 4.Mesa | 5.Gen");
 					int type = readInt(1, 5);
 					System.out.println(totalManager.createEvent(requestEventData(0, type)));
 				}
 				case 2 -> System.out.println(totalManager.listEvents());
 				case 3 -> {
-					System.out.print("Identificador a modificar: ");
+					System.out.print("ID a modificar: ");
 					int id = readInt(1, 99999);
-					System.out.println("Nuevo tipo:");
-					System.out.println("1. Conferencia");
-					System.out.println("2. Taller Práctico");
-					System.out.println("3. Presentación de Proyecto");
-					System.out.println("4. Mesa Redonda");
-					System.out.println("5. General");
+					System.out.println("Nuevo tipo: 1.Conf | 2.Taller | 3.Proj | 4.Mesa | 5.Gen");
 					int type = readInt(1, 5);
 					System.out.println(totalManager.updateEvent(requestEventData(id, type)));
 				}
-				case 4 -> {
-					System.out.print("Identificador a eliminar: ");
-					System.out.println(totalManager.deleteEvent(readInt(1, 99999)));
-				}
-				case 5 -> {
-					System.out.print("Introduce el ID del evento: ");
-					System.out.println(totalManager.getEventById(readInt(1, 99999)));
-				}
+				case 4 -> System.out.println(totalManager.deleteEvent(readInt(1, 99999)));
+				case 5 -> System.out.println(totalManager.getEventById(readInt(1, 99999)));
+				case 6 -> System.out.println("Próximo ID Evento: " + totalManager.getGlobalCounterEvent());
 				}
 			} catch (Exception e) {
 				System.err.println("Error: " + e.getMessage());
@@ -218,62 +192,28 @@ public class ViewEuskalEncounter {
 	private void manageEncounters() {
 		int action;
 		do {
-			action = showActionMenu("Encuentros");
+			action = showActionMenu("Encuentros", true);
 			if (action == 0)
 				break;
 			try {
 				switch (action) {
 				case 1 -> {
 					String loc = readString("Ubicación: ", 150);
-					Date start = null;
-					while (start == null) {
-						try {
-							start = Date.valueOf(readString("Fecha Inicio (YYYY-MM-DD): ", 10));
-						} catch (Exception e) {
-							System.out.println("Formato de fecha inválido.");
-						}
-					}
-					Date end = null;
-					while (end == null) {
-						try {
-							end = Date.valueOf(readString("Fecha Fin (YYYY-MM-DD): ", 10));
-						} catch (Exception e) {
-							System.out.println("Formato de fecha inválido.");
-						}
-					}
+					Date start = Date.valueOf(readString("Inicio (YYYY-MM-DD): ", 10));
+					Date end = Date.valueOf(readString("Fin (YYYY-MM-DD): ", 10));
 					System.out.println(totalManager.createEncounter(loc, start, end));
 				}
 				case 2 -> System.out.println(totalManager.listEncounters());
 				case 3 -> {
-					System.out.print("Identificador del encuentro: ");
 					int id = readInt(1, 9999);
 					String loc = readString("Nueva Ubicación: ", 150);
-					Date dS = null;
-					while (dS == null) {
-						try {
-							dS = Date.valueOf(readString("Nuevo Inicio (YYYY-MM-DD): ", 10));
-						} catch (Exception e) {
-							System.out.println("Formato inválido.");
-						}
-					}
-					Date dE = null;
-					while (dE == null) {
-						try {
-							dE = Date.valueOf(readString("Nuevo Fin (YYYY-MM-DD): ", 10));
-						} catch (Exception e) {
-							System.out.println("Formato inválido.");
-						}
-					}
+					Date dS = Date.valueOf(readString("Nuevo Inicio (YYYY-MM-DD): ", 10));
+					Date dE = Date.valueOf(readString("Nuevo Fin (YYYY-MM-DD): ", 10));
 					System.out.println(totalManager.updateEncounter(new Encounter(id, loc, dS, dE)));
 				}
-				case 4 -> {
-					System.out.print("Identificador a borrar: ");
-					System.out.println(totalManager.deleteEncounter(readInt(1, 99999)));
-				}
-				case 5 -> {
-					System.out.print("Introduce el código del encuentro: ");
-					System.out.println(totalManager.getEncounterById(readInt(1, 99999)));
-				}
+				case 4 -> System.out.println(totalManager.deleteEncounter(readInt(1, 99999)));
+				case 5 -> System.out.println(totalManager.getEncounterById(readInt(1, 99999)));
+				case 6 -> System.out.println("Próximo ID Encuentro: " + totalManager.getGlobalCounterEncounter());
 				}
 			} catch (Exception e) {
 				System.err.println("Error: " + e.getMessage());
@@ -284,25 +224,20 @@ public class ViewEuskalEncounter {
 	private void manageGuests() {
 		int action;
 		do {
-			action = showActionMenu("Invitados");
+			action = showActionMenu("Invitados", false); // Opción 6 desactivada
 			if (action == 0)
 				break;
 			try {
 				switch (action) {
 				case 1 -> System.out.println(totalManager.createGuest(readString("Usuario: ", 50),
 						readString("Nombre: ", 100), readString("Apellidos: ", 150), readString("Teléfono: ", 15),
-						readString("Carrera: ", 200), readEmail("Correo Electrónico", 150),
-						readString("Contraseña: ", 255)));
+						readString("Carrera: ", 200), readEmail("Email", 150), readString("Pass: ", 255)));
 				case 2 -> System.out.println(totalManager.listGuests());
 				case 3 -> System.out.println(totalManager.updateGuest(new Guest(readString("Usuario: ", 50),
 						readString("Nombre: ", 100), readString("Apellidos: ", 150), readString("Teléfono: ", 15),
-						readString("Carrera: ", 200), readEmail("Correo Electrónico", 150),
-						readString("Contraseña: ", 255))));
+						readString("Carrera: ", 200), readEmail("Email", 150), readString("Pass: ", 255))));
 				case 4 -> System.out.println(totalManager.deleteGuest(readString("Usuario a borrar: ", 50)));
-				case 5 -> {
-					System.out.print("Introduce el nombre de usuario: ");
-					System.out.println(totalManager.getGuestByUsername(readString("Usuario: ", 50)));
-				}
+				case 5 -> System.out.println(totalManager.getGuestByUsername(readString("Usuario: ", 50)));
 				}
 			} catch (Exception e) {
 				System.err.println("Error: " + e.getMessage());
@@ -313,20 +248,18 @@ public class ViewEuskalEncounter {
 	private void manageUsers() {
 		int action;
 		do {
-			action = showActionMenu("Usuarios");
+			action = showActionMenu("Usuarios", false); // Opción 6 desactivada
 			if (action == 0)
 				break;
 			try {
 				switch (action) {
 				case 1 -> System.out.println(totalManager.createUser(readDni(), readString("Nombre: ", 100),
-						readString("Apellido: ", 150), readEmail("Correo Electrónico", 150)));
+						readString("Apellido: ", 150), readEmail("Email", 150)));
 				case 2 -> System.out.println(totalManager.listUsers());
 				case 3 -> System.out.println(totalManager.updateUser(new User(readDni(), readString("Nombre: ", 100),
-						readString("Apellido: ", 150), readEmail("Correo Electrónico", 150))));
+						readString("Apellido: ", 150), readEmail("Email", 150))));
 				case 4 -> System.out.println(totalManager.deleteUser(readDni()));
-				case 5 -> {
-					System.out.println(totalManager.getUserByDni(readDni()));
-				}
+				case 5 -> System.out.println(totalManager.getUserByDni(readDni()));
 				}
 			} catch (Exception e) {
 				System.err.println("Error: " + e.getMessage());
@@ -338,51 +271,18 @@ public class ViewEuskalEncounter {
 		String title = readString("Título: ", 100);
 		String loc = readString("Ubicación: ", 150);
 		String desc = readString("Descripción: ", 255);
-
-		Date dS = null;
-		while (dS == null) {
-			try {
-				dS = Date.valueOf(readString("Fecha Inicio (YYYY-MM-DD): ", 10));
-			} catch (IllegalArgumentException e) {
-				System.out.println("Error en formato de fecha. Use YYYY-MM-DD.");
-			}
-		}
-
-		Date dE = null;
-		while (dE == null) {
-			try {
-				dE = Date.valueOf(readString("Fecha Fin (YYYY-MM-DD): ", 10));
-			} catch (IllegalArgumentException e) {
-				System.out.println("Error en formato de fecha. Use YYYY-MM-DD.");
-			}
-		}
-
-		Time hS = null;
-		while (hS == null) {
-			try {
-				hS = Time.valueOf(readString("Hora Inicio (HH:MM:SS): ", 8));
-			} catch (IllegalArgumentException e) {
-				System.out.println("Error en formato de hora. Use HH:MM:SS.");
-			}
-		}
-
-		Time hE = null;
-		while (hE == null) {
-			try {
-				hE = Time.valueOf(readString("Hora Fin (HH:MM:SS): ", 8));
-			} catch (IllegalArgumentException e) {
-				System.out.println("Error en formato de hora. Use HH:MM:SS.");
-			}
-		}
-
-		System.out.print("Identificador del Encuentro Relacionado: ");
+		Date dS = Date.valueOf(readString("Fecha Inicio (YYYY-MM-DD): ", 10));
+		Date dE = Date.valueOf(readString("Fecha Fin (YYYY-MM-DD): ", 10));
+		Time hS = Time.valueOf(readString("Hora Inicio (HH:MM:SS): ", 8));
+		Time hE = Time.valueOf(readString("Hora Fin (HH:MM:SS): ", 8));
+		System.out.print("ID Encuentro Relacionado: ");
 		int fk = readInt(1, 999999);
 
 		return switch (typeChoice) {
-		case 1 -> new KeynoteSpeech(id, title, loc, desc, dS, dE, hS, hE, fk, readString("Tipo Conferencia: ", 100));
+		case 1 -> new KeynoteSpeech(id, title, loc, desc, dS, dE, hS, hE, fk, readString("Tipo Conf: ", 100));
 		case 2 -> new PracticalWorkshop(id, title, loc, desc, dS, dE, hS, hE, fk, readInt(1, 999));
-		case 3 -> new ProjectPresentation(id, title, loc, desc, dS, dE, hS, hE, fk, readString("Tipo Proyecto: ", 100),
-				readString("Descripción larga: ", 500));
+		case 3 -> new ProjectPresentation(id, title, loc, desc, dS, dE, hS, hE, fk, readString("Tipo Proj: ", 100),
+				readString("Desc larga: ", 500));
 		case 4 -> new RoundTable(id, title, loc, desc, dS, dE, hS, hE, fk, readInt(1, 999));
 		default -> new Event(id, title, loc, desc, dS, dE, hS, hE, fk);
 		};

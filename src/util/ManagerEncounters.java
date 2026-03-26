@@ -66,7 +66,7 @@ public class ManagerEncounters {
 			return "Error al listar encuentros: " + e.getMessage();
 		}
 
-		return sb.isEmpty() ? "No hay encuentros registrados." : sb.toString();
+		return sb.length() == 0 ? "No hay encuentros registrados." : sb.toString();
 	}
 
 	// metodo para actualizar un encuentro existente
@@ -93,5 +93,23 @@ public class ManagerEncounters {
 			int rows = pstmt.executeUpdate();
 			return rows > 0 ? "Encuentro eliminado." : "No se encontro el identificador.";
 		}
+	}
+
+	// metodo para obtener el proximo valor auto-incremental de la tabla EVENTO
+	public int getGlobalCounter() {
+		String sql = "SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES "
+				+ "WHERE TABLE_SCHEMA = 'EUSKALENCOUNTER' AND TABLE_NAME = 'EVENTO'";
+
+		try (Connection conn = DatabaseConnector.getConexion();
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				ResultSet rs = pstmt.executeQuery()) {
+
+			if (rs.next()) {
+				return rs.getInt("AUTO_INCREMENT");
+			}
+		} catch (SQLException e) {
+			System.err.println("Error al obtener el contador global: " + e.getMessage());
+		}
+		return -1;
 	}
 }

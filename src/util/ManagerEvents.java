@@ -240,4 +240,22 @@ public class ManagerEvents {
 	public int getCantidadEventos() {
 		return eventList.size();
 	}
+
+	// metodo para obtener el proximo valor auto-incremental de la tabla EVENTO
+	public int getGlobalCounter() {
+		String sql = "SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES "
+				+ "WHERE TABLE_SCHEMA = 'EUSKALENCOUNTER' AND TABLE_NAME = 'EVENTO'";
+
+		try (Connection conn = DatabaseConnector.getConexion();
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				ResultSet rs = pstmt.executeQuery()) {
+
+			if (rs.next()) {
+				return rs.getInt("AUTO_INCREMENT");
+			}
+		} catch (SQLException e) {
+			System.err.println("Error al obtener el contador global: " + e.getMessage());
+		}
+		return -1;
+	}
 }
